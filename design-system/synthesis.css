@@ -1,0 +1,522 @@
+/* ==========================================================================
+   Salazar × Synthesis — reskinned component layer
+   --------------------------------------------------------------------------
+   Vercel's component STRUCTURE + SpaceX's overlay-nav & full-bleed photo band,
+   re-skinned into the Salazar identity: black canvas, one signal red, Stara
+   only, hairline borders, hard rectangles + true circles, NO shadows, NO pills.
+
+   Builds on ../../colors_and_type.css + ./kit.css. Add this third.
+   ========================================================================== */
+
+/* ----------------------------------------------------------------------
+   Shared atoms reused across the borrowed components
+   ---------------------------------------------------------------------- */
+.tech-eyebrow {                 /* Vercel's mono eyebrow → Stara wide-caps    */
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-display);
+  font-size: 12px; font-weight: 600; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--ink-muted);
+}
+.tech-eyebrow .idx { color: var(--accent-red); }      /* red index marker     */
+.tech-eyebrow::before {                                /* leading hairline tick */
+  content: ""; width: 22px; height: 1px; background: var(--hairline-soft);
+}
+
+/* diagonal red hatch run (brand accent next to labels) */
+.hatch-run { display: inline-flex; gap: 4px; }
+.hatch-run i { width: 4px; height: 15px; background: var(--accent-red); transform: skewX(-20deg); }
+
+/* ======================================================================
+   1 · OVERLAY NAV  (SpaceX) — transparent, white-on-image, wide caps
+   ====================================================================== */
+.snav {
+  position: fixed; inset: 0 0 auto 0; z-index: 50;
+  display: flex; align-items: center; gap: 40px;
+  padding: 22px 40px; color: #fff; background: transparent;
+}
+.snav.is-solid {
+  color: var(--ink);
+  background: rgba(13,13,13,0.55);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+  border-bottom: 1px solid var(--hairline);
+  padding-top: 14px; padding-bottom: 14px;
+}
+:root[data-theme="light"] .snav { color: var(--ink); }
+:root[data-theme="light"] .snav.is-solid { background: rgba(244,244,241,0.62); }
+.snav .brand {
+  font-family: var(--font-display); font-weight: 900; font-size: 18px;
+  letter-spacing: 1px; text-transform: lowercase; white-space: nowrap; color: inherit;
+}
+.snav .brand b { color: var(--accent-red); }
+/* eye = theme toggle */
+.snav .theme-eye {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border: 1px solid currentColor; background: transparent;
+  color: inherit; cursor: pointer; opacity: .85; transition: opacity .15s, background .15s, color .15s;
+}
+.snav .theme-eye:hover { opacity: 1; background: var(--accent-red); border-color: var(--accent-red); color: #fff; }
+.snav .brand-wrap { display: inline-flex; align-items: center; gap: 12px; }
+.snav-links { display: flex; align-items: center; gap: 34px; margin: 0 auto; }
+.snav-links a {
+  position: relative;
+  font-family: var(--font-display); font-size: 12px; font-weight: 600;
+  letter-spacing: 2.5px; text-transform: uppercase; color: currentColor;
+  text-decoration: none; opacity: .82; transition: opacity .15s, color .15s;
+}
+.snav-links a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 1px;
+  background: currentColor; transform: scaleX(0); transform-origin: left;
+  opacity: .55; transition: transform .32s cubic-bezier(.22,.61,.36,1);
+}
+.snav-links a:hover { opacity: 1; color: var(--accent-red); }
+.snav-links a.is-active { opacity: 1; }
+.snav-links a.is-active::after { transform: scaleX(1); }
+.snav .snav-right { display: inline-flex; align-items: center; gap: 0; }
+.snav .snav-cta {
+  border: 1px solid currentColor; background: transparent; color: inherit;
+  height: 40px; padding: 0 22px; font-family: var(--font-display); font-size: 12px;
+  font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 10px; transition: background .15s, color .15s;
+}
+.snav .snav-cta:hover { background: var(--accent-red); border-color: var(--accent-red); color: #fff; }
+
+/* ---- Language menu (hamburger) — shared by portfolio + DS component ---- */
+.lang-menu { position: relative; }
+.lang-trigger {
+  display: inline-flex; align-items: center; gap: 11px; background: transparent;
+  border: 1px solid currentColor; color: inherit; height: 40px; padding: 0 14px; margin-left: -1px; cursor: pointer;
+  font-family: var(--font-display); transition: background .15s, color .15s, border-color .15s;
+}
+.lang-trigger:hover { border-color: var(--accent-red); position: relative; z-index: 1; }
+.lang-trigger .hb { display: inline-flex; flex-direction: column; gap: 3px; }
+.lang-trigger .hb i { width: 18px; height: 2px; background: currentColor; display: block; transition: transform .2s ease, opacity .2s ease; }
+.lang-trigger.open .hb i:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+.lang-trigger.open .hb i:nth-child(2) { opacity: 0; }
+.lang-trigger.open .hb i:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+.lang-trigger .lang-cur { font-size: 12px; font-weight: 700; letter-spacing: 2px; }
+.lang-pop {
+  position: absolute; top: calc(100% + 12px); right: 0; min-width: 208px;
+  background: var(--canvas); border: 1px solid var(--hairline); z-index: 70; color: var(--ink);
+}
+.lang-pop-head {
+  font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--ink-muted); padding: 13px 15px; border-bottom: 1px solid var(--hairline);
+}
+.lang-opt {
+  display: flex; align-items: center; gap: 12px; width: 100%; background: transparent;
+  border: none; border-bottom: 1px solid var(--hairline-soft); color: var(--ink);
+  padding: 13px 15px; cursor: pointer; text-align: left; transition: background .15s;
+}
+.lang-opt:last-child { border-bottom: none; }
+.lang-opt:hover { background: var(--surface-1); }
+.lang-opt .lang-code { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 2px; width: 26px; color: var(--ink-muted); }
+.lang-opt.on .lang-code { color: var(--accent-red); }
+.lang-opt .lang-label { font-family: var(--font-display); font-size: 14px; font-weight: 600; }
+.lang-opt .lang-chk { margin-left: auto; display: inline-flex; color: var(--accent-red); }
+
+/* Line-art motifs baked white in their SVG → invert to dark on light ground */
+:root[data-theme="light"] .art-themed { filter: invert(1); }
+
+/* ---- Hero now follows the active theme (ink on the textured ground) ---- */
+.hero-band { color: var(--ink); }
+
+/* ---- Scroll-driven depth (Rockstar-style): sections rise + fade into place as
+   they enter the viewport; tagged decorative layers drift at their own speed
+   via JS (data-parallax). All gated behind reduced-motion. ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .par-reveal {
+    opacity: 0; transform: translateY(56px);
+    transition: opacity .9s cubic-bezier(.22,.61,.36,1), transform 1s cubic-bezier(.22,.61,.36,1);
+  }
+  .par-reveal.is-in { opacity: 1; transform: none; }
+}
+[data-parallax] { will-change: transform; }
+
+/* ---- Cursor spotlight: brighter copy of the page hatch, revealed only inside
+   a comet of soft radii that LAG behind the pointer — the head trails with
+   delay and a string of shrinking, fading points behind it forms the tail.
+   Two stacked layers give a sharp striking-red CORE that blurs progressively
+   outward into a soft HALO. Both masks are composed in JS from the same chain. */
+.cursor-hatch, .cursor-halo, .cursor-ring {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(135deg, var(--hatch-lit) 0 2px, transparent 2px 13px);
+  -webkit-mask-image: radial-gradient(300px circle at -400px -400px, #000 0%, transparent 72%);
+          mask-image: radial-gradient(300px circle at -400px -400px, #000 0%, transparent 72%);
+  opacity: 0; transition: opacity .55s ease;
+  will-change: -webkit-mask-image, mask-image, opacity;
+}
+.cursor-hatch { filter: blur(1px); }    /* sharp, striking-red core */
+.cursor-halo  { filter: blur(16px); }   /* diffuse outer fill */
+.cursor-ring  { filter: blur(11px); }   /* soft blurred outer stroke */
+.cursor-hatch.on, .cursor-halo.on, .cursor-ring.on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .cursor-hatch, .cursor-halo, .cursor-ring { display: none; } }
+
+/* ======================================================================
+   2 · FULL-BLEED PHOTO BAND  (SpaceX) — placeholder + overlay, no scrim
+   ====================================================================== */
+.photo-band {
+  position: relative; min-height: 600px; display: flex; align-items: flex-end;
+  overflow: hidden; background: var(--canvas);
+}
+.photo-band .photo-slot {                /* labelled striped placeholder        */
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(135deg, #141414 0 2px, transparent 2px 11px),
+    linear-gradient(180deg, #1a1a1a, #0d0d0d 70%);
+}
+.photo-band .photo-slot::after {
+  content: attr(data-label);
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  font-family: var(--font-display); font-size: 12px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase; color: #3a3a3a; white-space: nowrap;
+}
+.photo-band .art-overlay {               /* line-art floats over the image       */
+  position: absolute; pointer-events: none; opacity: .9;
+}
+.photo-band .band-inner {
+  position: relative; z-index: 2; padding: 56px 40px;
+  max-width: 1200px; margin: 0 auto; width: 100%;
+}
+.photo-band h2 {
+  margin: 18px 0 22px; font-family: var(--font-display); font-weight: 900;
+  font-size: 76px; line-height: .95; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--ink); text-shadow: none;
+}
+.photo-band p { max-width: 440px; color: var(--ink-muted); margin: 0 0 28px; }
+
+/* ----- Portfolio hero band (full-bleed photo carrying the name lockup) ----- */
+.hero-band { position: relative; min-height: 100vh; display: flex; align-items: flex-end; overflow: hidden; background: transparent; }
+.hero-band .photo-slot {
+  position: absolute; inset: 0;
+  background: var(--hero-glow);
+}
+.hero-band .hero-art { position: absolute; right: -120px; top: 8vh; opacity: .5; pointer-events: none; }
+
+/* Hero globe — slow drift + breathing on the two SVG layers */
+@media (prefers-reduced-motion: no-preference) {
+  .globe-outer { transform-origin: 50% 50%; animation: globe-spin 60s linear infinite; }
+  .globe-inner { transform-origin: 50% 50%; animation: globe-spin-rev 44s linear infinite, globe-breathe 9s ease-in-out infinite; }
+  .globe-art   { animation: globe-bob 11s ease-in-out infinite; }
+}
+@keyframes globe-spin     { to { transform: rotate(360deg); } }
+@keyframes globe-spin-rev { to { transform: rotate(-360deg); } }
+@keyframes globe-breathe  { 0%, 100% { opacity: .72; } 50% { opacity: .98; } }
+@keyframes globe-bob      { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-18px); } }
+.hero-inner { position: relative; z-index: 2; width: 100%; padding-top: 120px; padding-bottom: 72px; display: flex; flex-direction: column; align-items: flex-start; }
+.hero-cta-row { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-top: 30px; }
+.scroll-note { font-family: var(--font-display); font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ink-muted); }
+
+/* ----- System section split ----- */
+.sys-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: 64px; align-items: center; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
+#system, #pricing { scroll-margin-top: 90px; }
+@media (max-width: 720px) {
+  .sys-grid, .pricing-grid { grid-template-columns: 1fr; gap: 36px; }
+  .hero-band .hero-art { display: none; }
+  .hero-inner h1 { font-size: 64px !important; }
+}
+
+/* ======================================================================
+   3 · ANNOUNCEMENT BANNER + BADGES  (Vercel) → hard rect, hairline
+   ====================================================================== */
+.announce {
+  display: inline-flex; align-items: center; gap: 16px;
+  border: 1px solid var(--hairline); background: transparent;
+  padding: 11px 12px 11px 16px;
+}
+.announce .tag {
+  font-family: var(--font-display); font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--on-accent);
+  background: var(--accent-red); padding: 4px 9px;
+}
+.announce .txt { font-size: 14px; font-weight: 500; color: var(--ink); letter-spacing: -.1px; }
+.announce .arr { color: var(--ink-muted); display: inline-flex; }
+.announce:hover .arr { color: var(--accent-red); }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--hairline); padding: 5px 10px;
+  font-family: var(--font-display); font-size: 11px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--ink-muted);
+}
+.badge.is-live { color: var(--ink); }
+.badge .dot { width: 7px; height: 7px; border-radius: var(--radius-full); background: var(--accent-red); }
+.badge.is-beta { color: var(--ink); border-color: var(--accent-red); }
+
+/* ======================================================================
+   4 · CODE / TERMINAL MOCKUP  (Vercel) → hairline box, red prompt, Stara
+   ====================================================================== */
+.terminal {
+  border: 1px solid var(--hairline); background: var(--canvas); width: 100%;
+}
+.terminal .term-bar {
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 16px; border-bottom: 1px solid var(--hairline);
+}
+.terminal .lights { display: flex; gap: 8px; }
+.terminal .lights i { width: 9px; height: 9px; border-radius: var(--radius-full); border: 1px solid var(--hairline); }
+.terminal .lights i.on { background: var(--accent-red); border-color: var(--accent-red); }
+.terminal .term-name {
+  font-family: var(--font-display); font-size: 11px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--ink-muted);
+}
+.terminal .term-body {
+  padding: 20px 18px; font-family: var(--font-display); font-weight: 500;
+  font-size: 14px; line-height: 1.85; letter-spacing: 0;
+  font-variant-numeric: tabular-nums; color: var(--ink);
+}
+.terminal .term-body .ln { display: flex; gap: 12px; white-space: pre; }
+.terminal .prompt { color: var(--accent-red); user-select: none; }
+.terminal .term-body .mut { color: var(--ink-muted); }
+.terminal .term-body .ok  { color: var(--ink); }
+.terminal .cursor { display: inline-block; width: 9px; height: 17px; background: var(--accent-red); vertical-align: -3px; animation: term-blink 1s steps(1) infinite; }
+@keyframes term-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .terminal .cursor { animation: none; } }
+
+/* ======================================================================
+   5 · PRICING TIERS  (Vercel) → hard rect, hairline; featured = red fill
+   ====================================================================== */
+.ptier {
+  border: 1px solid var(--hairline); background: transparent;
+  padding: 32px 28px; display: flex; flex-direction: column; gap: 22px;
+  transition: background .18s ease, border-color .18s ease;
+}
+.ptier .tier-name {
+  font-family: var(--font-display); font-size: 13px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--ink-muted);
+}
+.ptier .tier-price { display: flex; align-items: baseline; gap: 8px; }
+.ptier .tier-price b { font-family: var(--font-display); font-weight: 900; font-size: 56px; line-height: .9; letter-spacing: -1.5px; color: var(--ink); }
+.ptier .tier-price span { font-size: 13px; font-weight: 500; color: var(--ink-muted); letter-spacing: 1px; text-transform: uppercase; }
+.ptier .tier-feats { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+.ptier .tier-feats li { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; color: var(--ink); letter-spacing: -.1px; }
+.ptier .tier-feats i { width: 7px; height: 7px; background: var(--accent-red); flex: none; }    /* hard red tick */
+.ptier .tier-cta {
+  margin-top: auto; text-align: center; border: 1px solid var(--hairline);
+  background: transparent; color: var(--ink); padding: 14px;
+  font-family: var(--font-display); font-size: 13px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: border-color .15s, background .15s;
+}
+.ptier .tier-cta:hover { border-color: var(--ink-muted); }
+.ptier .tier-cta.is-fill { background: var(--accent-red); border-color: var(--accent-red); color: var(--on-accent); }
+
+/* featured tier — no label; marked by a subtle red outer glow (intentional
+   exception to the no-shadow rule, used only to denote "most picked") */
+.ptier.is-featured { border-color: rgba(255,40,0,.55); box-shadow: 0 0 0 1px rgba(255,40,0,.45), 0 0 40px -8px rgba(255,40,0,.5); }
+.ptier.is-featured:hover { box-shadow: 0 0 46px -6px rgba(255,40,0,.6); }
+
+/* polarity flip → tier becomes the red band ON HOVER (any tier) */
+.ptier:hover { background: var(--surface-red); border-color: var(--surface-red); }
+.ptier:hover .tier-name { color: rgba(255,255,255,.72); }
+.ptier:hover .tier-price b,
+.ptier:hover .tier-feats li { color: var(--on-accent); }
+.ptier:hover .tier-price span { color: rgba(255,255,255,.8); }
+.ptier:hover .tier-feats i { background: var(--on-accent); }
+.ptier:hover .tier-cta { background: var(--canvas); border-color: var(--canvas); color: var(--ink); }
+.ptier:hover .tier-cta:hover { filter: brightness(1.25); }
+.ptier:hover .tier-flag { background: var(--canvas); color: var(--on-accent); }
+.ptier .tier-flag {
+  align-self: flex-start; font-family: var(--font-display); font-size: 10px;
+  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  background: var(--accent-red); color: var(--on-accent); padding: 4px 9px;
+}
+
+/* ======================================================================
+   6 · DATA TABLE  (Vercel) → mono-caps header, hairline row dividers
+   ====================================================================== */
+.dtable { width: 100%; border-collapse: collapse; border: 1px solid var(--hairline); }
+.dtable thead th {
+  text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-display); font-size: 11px; font-weight: 600;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-muted);
+  background: var(--surface-1);
+}
+.dtable tbody td {
+  padding: 16px 18px; border-bottom: 1px solid var(--hairline-soft);
+  font-size: 14px; font-weight: 500; color: var(--ink); letter-spacing: -.1px;
+}
+.dtable tbody tr:last-child td { border-bottom: none; }
+.dtable tbody tr:hover td { background: var(--surface-1); }
+.dtable .muted { color: var(--ink-muted); }
+.dtable .status { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-muted); }
+.dtable .status::before { content: ""; width: 7px; height: 7px; border-radius: var(--radius-full); background: var(--ink-muted); }
+.dtable .status.live { color: var(--ink); }
+.dtable .status.live::before { background: var(--accent-red); }
+
+/* ======================================================================
+   7 · APP-SHELL ROWS  (Vercel) → red active indicator bar
+   ====================================================================== */
+.shell { display: grid; grid-template-columns: 230px 1fr; border: 1px solid var(--hairline); min-height: 280px; }
+.shell .shell-side { border-right: 1px solid var(--hairline); padding: 14px 0; }
+.shell .shell-row {
+  display: flex; align-items: center; gap: 12px; position: relative;
+  padding: 12px 20px; font-family: var(--font-display); font-size: 13px;
+  font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--ink-muted); cursor: pointer; transition: color .15s, background .15s;
+}
+.shell .shell-row:hover { color: var(--ink); background: var(--surface-1); }
+.shell .shell-row.is-active { color: var(--ink); }
+.shell .shell-row.is-active::before {
+  content: ""; position: absolute; left: 0; top: 6px; bottom: 6px; width: 3px; background: var(--accent-red);
+}
+.shell .shell-row .gl { width: 7px; height: 7px; border: 1px solid currentColor; flex: none; }
+.shell .shell-row.is-active .gl { background: var(--accent-red); border-color: var(--accent-red); }
+.shell .shell-main { padding: 26px; }
+.shell .shell-main .mhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+
+/* ======================================================================
+   8 · MODAL / DIALOG  (Vercel) → hairline box, no shadow
+   ====================================================================== */
+.modal-scrim { position: absolute; inset: 0; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; }
+.modal {
+  border: 1px solid var(--hairline); background: var(--canvas);
+  width: 420px; max-width: 90%; padding: 28px;
+}
+.modal .m-eyebrow { margin-bottom: 14px; }
+.modal h3 { margin: 0 0 12px; font-family: var(--font-display); font-weight: 800; font-size: 24px; letter-spacing: -.5px; color: var(--ink); }
+.modal p { margin: 0 0 22px; font-size: 14px; color: var(--ink-muted); line-height: 1.5; }
+.modal .m-actions { display: flex; gap: 12px; justify-content: flex-end; }
+
+/* ======================================================================
+   9 · TOAST  (Vercel) → hairline box + red square accent
+   ====================================================================== */
+.toast {
+  display: flex; align-items: center; gap: 14px;
+  border: 1px solid var(--hairline); background: var(--canvas); padding: 14px 16px; width: 360px; max-width: 100%;
+}
+.toast .t-mark { width: 8px; height: 8px; background: var(--accent-red); flex: none; }
+.toast .t-body { display: flex; flex-direction: column; gap: 2px; }
+.toast .t-title { font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--ink); }
+.toast .t-msg { font-size: 13px; font-weight: 500; color: var(--ink-muted); }
+.toast .t-close { margin-left: auto; color: var(--ink-muted); cursor: pointer; background: none; border: none; }
+.toast .t-close:hover { color: var(--ink); }
+
+/* ======================================================================
+   10 · FORM FIELDS  (Vercel) → hairline box, transparent, hard rect
+   ====================================================================== */
+.field { display: flex; flex-direction: column; gap: 9px; }
+.field label {
+  font-family: var(--font-display); font-size: 11px; font-weight: 600;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-muted);
+}
+.field input, .field .ctl {
+  width: 100%; background: transparent; border: 1px solid var(--hairline);
+  color: var(--ink); font-family: var(--font-display); font-size: 14px; font-weight: 500;
+  letter-spacing: -.1px; padding: 0 14px; height: 44px; outline: none; transition: border-color .15s;
+}
+.field input::placeholder { color: #5a5a5a; }
+.field input:focus, .field .ctl:focus { border-color: var(--ink-muted); }
+.field input.is-sm { height: 36px; font-size: 13px; }
+.field input.is-lg { height: 52px; font-size: 16px; }
+.field .hint { font-size: 12px; color: var(--ink-muted); letter-spacing: 0; }
+
+/* ======================================================================
+   11 · CONTACT FORM  — questions, important field, segmented budget, toggle
+   ====================================================================== */
+.cform { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 64px; align-items: start; }
+.cform .c-side { position: relative; }
+.cform .c-side .c-eyebrow { margin-bottom: 2px; }
+.cform .c-side h2 {
+  margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 72px;
+  line-height: .9; letter-spacing: -1.5px; text-transform: uppercase; color: var(--ink);
+}
+.cform .c-side p { color: var(--ink-muted); font-size: 15px; line-height: 1.55; margin: 18px 0 0; max-width: 320px; }
+.cform .c-art { margin-top: 36px; opacity: .85; }
+
+.cform .c-fields { display: flex; flex-direction: column; gap: 26px; }
+.cform .c-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 520px) { .cform .c-row2 { grid-template-columns: 1fr; } }
+.qfield { display: flex; flex-direction: column; gap: 10px; }
+.qfield .q-label {
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-display); font-size: 13px; font-weight: 600;
+  letter-spacing: .3px; color: var(--ink); text-transform: none;
+}
+.qfield .q-num { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--accent-red); }
+.qfield textarea {
+  width: 100%; box-sizing: border-box; background: transparent; border: 1px solid var(--hairline);
+  color: var(--ink); font-family: var(--font-display); font-size: 15px; font-weight: 500;
+  line-height: 1.5; padding: 13px 15px; min-height: 76px; resize: vertical; outline: none; transition: border-color .15s;
+}
+.qfield textarea::placeholder { color: #5a5a5a; }
+.qfield textarea:focus { border-color: var(--ink-muted); }
+
+/* important question — red marker + red field, no left-border trope */
+.qfield.is-important .q-label { color: var(--ink); }
+.qfield.is-important .imp-tag {
+  font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; background: var(--accent-red); color: var(--on-accent); padding: 3px 8px;
+}
+.qfield.is-important textarea { border-color: var(--accent-red); }
+.qfield.is-important textarea:focus { border-color: var(--accent-red); box-shadow: inset 0 0 0 1px var(--accent-red); }
+.qfield.is-important .q-hatch { display: inline-flex; gap: 3px; margin-left: auto; }
+.qfield.is-important .q-hatch i { width: 3px; height: 12px; background: var(--accent-red); transform: skewX(-20deg); }
+
+/* budget toggle (hard square, never a pill) + segmented options */
+.budget-toggle { display: inline-flex; align-items: center; gap: 12px; cursor: pointer; user-select: none; background: none; border: none; padding: 0; appearance: none; -webkit-appearance: none; }
+.budget-toggle .sq {
+  width: 22px; height: 22px; border: 1px solid var(--hairline); background: transparent;
+  display: inline-flex; align-items: center; justify-content: center; flex: none; transition: background .15s, border-color .15s;
+}
+.budget-toggle .sq.on { background: var(--accent-red); border-color: var(--accent-red); }
+.budget-toggle .sq svg { width: 14px; height: 14px; color: var(--on-accent); opacity: 0; }
+.budget-toggle .sq.on svg { opacity: 1; }
+.budget-toggle .lbl { font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--ink); }
+
+.seg { display: flex; border: 1px solid var(--hairline); }
+.seg button {
+  flex: 1; padding: 13px 8px; background: transparent; border: none; border-right: 1px solid var(--hairline);
+  color: var(--ink-muted); font-family: var(--font-display); font-size: 13px; font-weight: 600;
+  letter-spacing: .5px; cursor: pointer; transition: background .15s, color .15s; white-space: nowrap;
+}
+.seg button:last-child { border-right: none; }
+.seg button:hover { color: var(--ink); background: var(--surface-1); }
+.seg button.on { background: var(--accent-red); border-color: var(--accent-red); color: var(--on-accent); }
+
+.budget-wrap { overflow: hidden; transition: max-height .25s ease, opacity .2s ease, margin .2s ease; }
+.budget-wrap.is-open { max-height: 120px; opacity: 1; margin-top: 16px; }
+.budget-wrap.is-closed { max-height: 0; opacity: 0; margin-top: 0; }
+
+/* CTA → toast (not a button) */
+.cta-toast-wrap { display: flex; justify-content: center; margin-top: 44px; }
+.cta-toast {
+  appearance: none; -webkit-appearance: none; cursor: pointer;
+  width: auto; min-width: 360px; padding: 16px 18px; gap: 18px; align-items: center;
+  transition: border-color .15s ease, background .15s ease;
+}
+.cta-toast:hover { border-color: var(--ink-muted); }
+.cta-toast .t-body { text-align: left; }
+.cta-toast .t-title { font-size: 13px; letter-spacing: 2.5px; }
+.cta-toast .t-msg { font-size: 13px; }
+.cta-toast .t-go {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 12px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--on-accent);
+  background: var(--accent-red); padding: 9px 14px;
+}
+.cta-toast:hover .t-go { filter: brightness(1.08); }
+
+/* ----- Condensed quote band (below hero) ----- */
+.qband {
+  background: var(--surface-red); color: var(--on-accent);
+  cursor: grab; touch-action: pan-y; user-select: none; position: relative;
+}
+.qband:active { cursor: grabbing; }
+.qband .qband-inner {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center;
+  height: 264px; box-sizing: border-box; padding-top: 36px; padding-bottom: 56px;
+}
+.qband .q-left { height: 100%; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+.qband .q-text { font-size: 24px; line-height: 1.25; font-weight: 600; font-style: italic; margin: 0; max-width: 640px; }
+.qband .q-by { margin-top: 16px; font-family: var(--font-display); font-size: 18px; font-weight: 800; letter-spacing: -.3px; }
+.qband .q-dots-rail { position: absolute; left: 50%; transform: translateX(-50%); bottom: 26px; }
+.qband .q-dots { display: flex; gap: 9px; }
+.qband .q-dots .d { width: 9px; height: 9px; border-radius: var(--radius-full); border: 1px solid #fff; background: transparent; padding: 0; cursor: pointer; }
+.qband .q-dots .d.on { background: #fff; }
+.qband .q-art { opacity: .9; pointer-events: none; }
+@media (max-width: 760px) {
+  .cform { grid-template-columns: 1fr; gap: 36px; }
+  .qband .qband-inner { grid-template-columns: 1fr; gap: 24px; }
+  .qband .q-art { display: none; }
+}

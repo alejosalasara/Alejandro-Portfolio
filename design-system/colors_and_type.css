@@ -1,0 +1,294 @@
+/* ==========================================================================
+   Salazar Portfolio — Foundations: Color + Type
+   --------------------------------------------------------------------------
+   Single source of truth for the design system's low-level visual tokens.
+   Black-canvas + one structural red. Stara display sans (self-hosted from
+   uploaded brand files). Geometry is binary: hard rectangles + true circles.
+
+   FONT: The brand face **Stara** is self-hosted from fonts/ below, weights
+   500–900 + matching italics. Medium 500 is the floor — there is no Regular/
+   Light cut. Italics are reserved for quotations.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Stara';
+  src: url('fonts/Stara-Medium.ttf') format('truetype');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Stara';
+  src: url('fonts/Stara-MediumItalic.ttf') format('truetype');
+  font-weight: 500; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Stara';
+  src: url('fonts/Stara-SemiBold.ttf') format('truetype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Stara';
+  src: url('fonts/Stara-SemiBoldItalic.ttf') format('truetype');
+  font-weight: 600; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Stara';
+  src: url('fonts/Stara-Bold.ttf') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Stara';
+  src: url('fonts/Stara-BoldItalic.ttf') format('truetype');
+  font-weight: 700; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Stara';
+  src: url('fonts/Stara-ExtraBold.ttf') format('truetype');
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Stara';
+  src: url('fonts/Stara-ExtraBoldItalic.ttf') format('truetype');
+  font-weight: 800; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Stara';
+  src: url('fonts/Stara-Black.ttf') format('truetype');
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Stara';
+  src: url('fonts/Stara-BlackItalic.ttf') format('truetype');
+  font-weight: 900; font-style: italic; font-display: swap;
+}
+
+:root {
+  /* ----------------------------------------------------------------------
+     COLOR — Brand & Accent
+     ---------------------------------------------------------------------- */
+  --primary:        #FFFFFF;   /* brand primary — display, body, line-art */
+  --accent-red:     #FF2800;   /* the single chromatic accent — structural */
+
+  /* COLOR — Surface */
+  --canvas:         #0D0D0D;   /* default ground — near-black, neutral */
+  --surface-1:      #161616;   /* barely-perceptible lift (inferred, rare) */
+  --surface-red:    #FF2800;   /* red as a whole section ground / fill */
+  --hairline:       #232323;   /* 1px borders on every outlined box */
+  --hairline-soft:  #1A1A1A;   /* subtler rules (inferred) */
+
+  /* COLOR — Text (binary ramp: ink or ink-muted, nothing between) */
+  --ink:            #FFFFFF;   /* headlines, titles, names, emphasis */
+  --ink-muted:      #868686;   /* secondary body, meta, roles, footer */
+  --on-accent:      #FFFFFF;   /* text/icons on red */
+
+  /* COLOR — Decorative */
+  --line-white:     #FFFFFF;   /* wireframe line-art stroke */
+  --line-red:       #FF2800;   /* wireframe line-art stroke */
+  --watermark:      #232323;   /* oversized ghost type behind content */
+
+  /* COLOR — Texture (page-wide diagonal hairline + hero vignette) */
+  --hatch:          #151515;   /* diagonal hairline weave on the ground */
+  --hatch-lit:      rgba(255,40,0,0.42); /* red weave lit under the cursor */
+  --hero-glow:      radial-gradient(120% 80% at 72% 8%, rgba(255,255,255,0.05) 0%, transparent 60%); /* @kind other */
+
+  /* ----------------------------------------------------------------------
+     TYPE — Family
+     ---------------------------------------------------------------------- */
+  --font-display: 'Stara', system-ui, sans-serif;
+  --font-body:    'Stara', system-ui, sans-serif;
+
+  /* Weights — Medium 500 is the FLOOR. No Regular/Light exists. */
+  --w-medium:   500; /* @kind font */
+  --w-semibold: 600; /* @kind font */
+  --w-bold:     700; /* @kind font */
+  --w-extrabold:800; /* @kind font */
+  --w-black:    900; /* @kind font */
+
+  /* ----------------------------------------------------------------------
+     SPACING — 8px base, 4px half-steps
+     ---------------------------------------------------------------------- */
+  --space-hair: 1px;
+  --space-xxs:  4px;
+  --space-xs:   8px;
+  --space-sm:   12px;
+  --space-md:   16px;
+  --space-lg:   24px;
+  --space-xl:   40px;
+  --space-xxl:  64px;
+  --space-section: 120px;
+
+  /* ----------------------------------------------------------------------
+     RADIUS — almost binary
+     ---------------------------------------------------------------------- */
+  --radius-none: 0px;     /* default for ALL chrome */
+  --radius-xs:   2px;     /* optional hairline softening, sparingly */
+  --radius-full: 9999px;  /* true circles only */
+
+  /* ----------------------------------------------------------------------
+     BORDERS
+     ---------------------------------------------------------------------- */
+  --border-hairline: 1px solid var(--hairline);
+}
+
+/* ==========================================================================
+   THEME — Light mode  (opt-in via <html data-theme="light">)
+   --------------------------------------------------------------------------
+   Extends the original black-only system with a second ground. The structural
+   red (--accent-red / --surface-red) and white-on-red (--on-accent) are
+   CONSTANT across themes — only the neutral ground + ink ramp invert. Surfaces
+   that sit over imagery (hero, work previews) are pinned light-on-dark in the
+   component CSS and do NOT follow the theme.
+   ========================================================================== */
+:root { color-scheme: dark; }
+:root[data-theme="light"] {
+  color-scheme: light;
+  --primary:        #0D0D0D;
+  --canvas:         #F4F4F1;   /* warm off-white shop ground */
+  --surface-1:      #E8E8E3;   /* lift on light */
+  --surface-red:    #FF2800;   /* unchanged */
+  --hairline:       #D4D4CD;   /* light hairline */
+  --hairline-soft:  #E3E3DC;
+  --ink:            #0D0D0D;
+  --ink-muted:      #6E6E6E;
+  --on-accent:      #FFFFFF;   /* unchanged */
+  --line-white:     #0D0D0D;   /* line-art inverts to dark on light */
+  --watermark:      #E6E6DF;
+  --hatch:          rgba(13,13,13,0.05);
+  --hatch-lit:      rgba(255,40,0,0.32);
+  --hero-glow:      radial-gradient(120% 80% at 72% 8%, rgba(255,255,255,0.6) 0%, transparent 60%); /* @kind other */
+}
+body { transition: background-color .35s ease, color .35s ease; }
+
+/* ==========================================================================
+   SEMANTIC TYPE ROLES
+   Sizes anchored from the 1440px frame (estimates — verify vs Dev Mode).
+   Tracking is TWO-POLE: tight on display, wide on uppercase labels.
+   ========================================================================== */
+
+.display-xxl,
+.display-xl,
+.display-outline,
+.display-md,
+.marquee,
+.quote,
+.headline,
+.body-lg,
+.body,
+.body-sm,
+.label,
+.btn-label,
+.caption {
+  font-family: var(--font-display);
+  color: var(--ink);
+}
+
+/* Hero name, "who am i", "LET'S / TOGETHER" */
+.display-xxl {
+  font-size: 96px;
+  font-weight: var(--w-black);
+  line-height: 0.95;
+  letter-spacing: -1.5px;
+}
+
+/* Secondary display openers */
+.display-xl {
+  font-size: 64px;
+  font-weight: var(--w-extrabold);
+  line-height: 1.0;
+  letter-spacing: -1.0px;
+}
+
+/* Stroke-only display ("am i", "WORK") — transparent fill, ~1.5px stroke */
+.display-outline {
+  font-size: 96px;
+  font-weight: var(--w-extrabold);
+  line-height: 0.95;
+  letter-spacing: -1.0px;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ink);
+  text-stroke: 1.5px var(--ink);
+}
+
+/* Running marquee band */
+.marquee {
+  font-size: 52px;
+  font-weight: var(--w-extrabold);
+  line-height: 1.0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Smaller display, large card titles */
+.display-md {
+  font-size: 32px;
+  font-weight: var(--w-extrabold);
+  line-height: 1.10;
+  letter-spacing: -0.5px;
+}
+
+/* Pull-quote + testimonial body — ITALIC = quotation only */
+.quote {
+  font-size: 30px;
+  font-weight: var(--w-medium);
+  font-style: italic;
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+}
+
+/* Names ("ELON MUSK"), works-row titles */
+.headline {
+  font-size: 20px;
+  font-weight: var(--w-bold);
+  line-height: 1.20;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Lead paragraphs */
+.body-lg {
+  font-size: 18px;
+  font-weight: var(--w-medium);
+  line-height: 1.35;
+  letter-spacing: -0.1px;
+}
+
+/* Default body, "who am i" paragraph */
+.body {
+  font-size: 15px;
+  font-weight: var(--w-medium);
+  line-height: 1.40;
+  letter-spacing: -0.1px;
+}
+
+/* Works meta, testimonial meta */
+.body-sm {
+  font-size: 14px;
+  font-weight: var(--w-medium);
+  line-height: 1.45;
+  letter-spacing: 0px;
+}
+
+/* Uppercase nav, section labels, eyebrows — WIDE tracking */
+.label {
+  font-size: 13px;
+  font-weight: var(--w-semibold);
+  line-height: 1.20;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Button labels (uppercase) */
+.btn-label {
+  font-size: 14px;
+  font-weight: var(--w-semibold);
+  line-height: 1.0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Footer, local-time, role lines */
+.caption {
+  font-size: 12px;
+  font-weight: var(--w-medium);
+  line-height: 1.30;
+  letter-spacing: 1px;
+}

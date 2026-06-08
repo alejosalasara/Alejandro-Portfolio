@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alejandro Salazar — Growth UX/UI Designer &amp; Email Marketer</title>
+  <link rel="stylesheet" href="_ds/salazar-portfolio-design-system-bfe2f621-a0a1-4ba4-9cd6-7764c1c96089/styles.css" />
+  <style id="custom-overrides">
+    /* ============================================================
+       STICKY STACK
+       After hero + the red quote band, the rest of the page is one
+       section: "who am i" pins in place and the following panels —
+       selected works, the marquee, let's-work, and contact — rise up
+       over it as full-viewport cards and stack. Pure layout (position:
+       sticky), so it's reliable in this preview where CSS transitions
+       and IntersectionObserver are unreliable.
+       ============================================================ */
+    .stack { position: relative; }
+    /* The preview harness puts overflow-x:hidden on #root, which couples to
+       overflow-y:auto and turns #root into a scroll container — that breaks the
+       sticky pin. Neutralise it and clip horizontal overflow at the root
+       scroller instead (root-level overflow doesn't break viewport-sticky). */
+    #root { overflow: visible !important; }
+    html { overflow-x: hidden; }
+    .stack-card {
+      position: sticky;
+      top: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      /* opaque so each card fully covers the one beneath as it rises,
+         but carries the same canvas + diagonal-hatch texture as the page */
+      background-color: var(--canvas);
+      background-image: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 13px);
+      /* anchor the weave to the VIEWPORT, not each card's own top edge, so the
+         diagonal lines stay in phase across every card boundary (no seam where
+         two cards meet) while still drifting for the parallax. */
+      background-attachment: fixed;
+      overflow: hidden;
+    }
+    /* explicit paint order: later cards rise over earlier ones */
+    .stack-card:nth-child(1) { z-index: 1; }
+    .stack-card:nth-child(2) { z-index: 2; }
+    .stack-card:nth-child(3) { z-index: 3; }
+    .stack-card:nth-child(4) { z-index: 4; }
+    .stack-card:nth-child(5) { z-index: 5; }
+
+    /* Each rising card carries a HAIRLINE top stroke (pure DS language — 1px
+       var(--hairline), no fills) so its leading edge reads as it slides up over
+       the card beneath; the continuous viewport-anchored hatch otherwise hides
+       the seam. A whisper-light top-edge shadow only hints at the motion — the
+       DS is "flat by intent", so the hairline does the real work, not the glow. */
+    .stack-card {
+      border-top: 1px solid var(--hairline);
+      box-shadow: 0 -10px 26px -22px rgba(0,0,0,0.45);
+    }
+    [data-theme="light"] .stack-card { box-shadow: 0 -10px 24px -24px rgba(0,0,0,0.25); }
+    /* the first card (who am i) has no seam above it */
+    .stack-card:first-child { border-top: none; box-shadow: none; }
+
+    /* Section ground: cards sit on the pure-black header ground (--canvas) and
+       are told apart by their hairline top-stroke. The exception is SELECTED
+       WORKS, which keeps the slightly-lifted grey surface (--surface-1) — a
+       single quiet step up from black. Both are theme-aware (light mode uses
+       the light grey / off-white). */
+    .stack > .stack-card[data-nav="works"] { background-color: var(--surface-1); }
+
+    /* the cursor hatch glow must ride ABOVE the stacked cards so it lights up
+       in every section, not only the hero. The cards create stacking contexts
+       at z 1–5; the fixed cursor layers default to z 0 and get buried. Lift
+       them to z 6 (still under the nav at z 50). */
+    .cursor-hatch, .cursor-halo, .cursor-ring { z-index: 6 !important; }
+
+    /* nav link interactions — guarantee the hover colour + a hover underline
+       (the active-link underline is driven by the scroll-spy in Nav.jsx). */
+    .snav-links a:hover { color: var(--accent-red) !important; opacity: 1 !important; }
+    .snav-links a:hover::after { transform: scaleX(1) !important; }
+
+    /* the inner section components shouldn't impose their own full-height /
+       big vertical padding — the card owns the vertical rhythm now */
+    .stack-card > section { width: 100%; padding-top: 0; padding-bottom: 0; min-height: 0; }
+
+    /* who am i — centered lockup, no line-art band (removed in About.jsx) */
+    .about-stage { min-height: 0; padding: 0; }
+
+    /* selected works — list sits on the card; the row hairlines + label
+       carry the structure (no nested filled panel) */
+    .works-stage { padding: 0; }
+
+    /* the marquee now bands the TOP of the "hit me up" (contact) section — a
+       full-bleed hairline band sitting just under the nav, with the booking
+       form centred in the space below it and the footer pinned to the floor. */
+    .contact-slab > .marquee-wrap { margin-top: 78px; }
+    .contact-slab .marquee-track .m { font-size: clamp(40px, 4.6vw, 60px); }
+
+    /* contact + footer — its own card that SWEEPS IN HORIZONTALLY from the
+       right as you scroll into it, on the SAME pure-black header ground (canvas)
+       so it reads as the page's base surface sliding over the pinned card. The
+       card itself is transparent + clips; the inner slab carries the surface and
+       the translateX (driven by JS in the stacking script below). */
+    .stack-card--contact {
+      background-color: var(--canvas);
+      background-image: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 13px);
+      background-attachment: fixed;
+      border-top: 1px solid var(--hairline);
+      justify-content: flex-start;
+      padding: 0;
+      overflow: hidden;
+    }
+    .contact-slab {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--canvas);
+      background-image: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 13px);
+      padding-top: 0;
+      /* base = settled & visible (so no-JS / reduced-motion shows content);
+         JS pushes it to translateX(100%) off-right and slides it back to 0 */
+      transform: translateX(0);
+      will-change: transform;
+    }
+    /* the booking form grows to fill the space between the marquee band and the
+       footer and centres itself there — no more dead gap above the footer. */
+    .contact-slab > #contact { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; }
+    /* keep the footer pinned to the bottom of the slab no matter how short the
+       form content is on a given viewport */
+    .contact-slab > footer { margin-top: auto; }
+
+    /* opt-out: Tweaks "Stacking → Off" reverts to plain stacked scroll */
+    .stack.no-stack > .stack-card { position: static; min-height: 0; padding-top: 90px; padding-bottom: 90px; }
+    .stack.no-stack > .stack-card--contact { padding: 0; overflow: visible; }
+    .stack.no-stack .contact-slab { transform: none !important; min-height: 0; padding-top: 60px; border-left: none; }
+
+    /* ============================================================
+       RESPONSIVE
+       The 1440 desktop layout narrows without losing its identity OR
+       its mechanics. The pinned card-stack is KEPT on every width:
+       each section is still a full-viewport (min-height:100vh) sticky
+       card that the next one rises over. The only structural change on
+       phones is overflow:visible + flex-start so a tall stacked card
+       (e.g. the contact form) can grow past 100vh instead of clipping.
+       ============================================================ */
+
+    /* --- Fluid display headlines (override the hard inline px sizes) --- */
+    #root .hero-inner h1 { font-size: clamp(34px, 10vw, 104px) !important; }
+    .about-stage h2 { font-size: clamp(46px, 8.4vw, 92px); }
+
+    /* --- Hero globe stays VISIBLE as it narrows: scaled down + pulled in so it
+       reads in the top-right instead of overflowing off-canvas. Overrides the
+       design-system rule that hid it under 720px. --- */
+    @media (max-width: 1000px) {
+      .hero-band .hero-art {
+        display: block !important;
+        right: -70px; top: 10vh;
+        transform: scale(0.5) !important; transform-origin: top right;
+        opacity: 0.34;
+      }
+    }
+    @media (max-width: 600px) {
+      .hero-band .hero-art {
+        right: -54px; top: 9vh;
+        transform: scale(0.34) !important; transform-origin: top right;
+        opacity: 0.3;
+      }
+    }
+
+    /* --- Mobile / large-phone structural breakpoint --- */
+    @media (max-width: 768px) {
+      .container { padding: 0 22px; }
+
+      /* Nav: drop the centered jump-links; keep brand + CTA + language.
+         CTA and language trigger are forced to ONE identical box (same height,
+         same border, same vertical centering) so they read as a single aligned
+         control group; they butt together via the DS -1px overlap. */
+      .snav { padding: 13px 18px; gap: 12px; }
+      .snav-links { display: none; }
+      .snav .snav-right { margin-left: auto; display: inline-flex; align-items: center; }
+      .snav .lang-menu { display: inline-flex; align-items: center; }
+      .snav .snav-cta,
+      .snav .lang-trigger {
+        height: 40px; box-sizing: border-box; font-size: 11px;
+        display: inline-flex; align-items: center; line-height: 1; margin-top: 0; margin-bottom: 0;
+      }
+      .snav .snav-cta { padding: 0 14px; letter-spacing: 1.5px; gap: 8px; }
+      .snav .lang-trigger { padding: 0 12px; gap: 9px; }
+
+      /* Hero — clear breathing room between the info and the red quote band */
+      .hero-inner { padding-top: 96px !important; padding-bottom: 92px !important; }
+
+      /* About — stack the lockup over the lead, left-aligned */
+      .about-stage > div { grid-template-columns: 1fr !important; gap: 28px !important; }
+      .about-stage h2 { text-align: left !important; }
+
+      /* Works rows — compact so all five fit the section comfortably:
+         title over meta, smaller type, tighter rows, arrow parked right */
+      .works-stage .kit-label { margin-bottom: 22px !important; }
+      .works-row { flex-wrap: wrap; gap: 1px 16px; padding: 12px 4px; }
+      .works-row .w-title { flex: 1 1 100% !important; font-size: clamp(18px, 4.6vw, 21px) !important; }
+      .works-row .w-meta { flex: 1 1 auto !important; font-size: 11.5px; }
+      .works-row .w-arrow { margin-left: auto; }
+      .works-row .w-arrow svg { width: 22px; height: 22px; }
+
+      /* ---- KEEP the sticky card-stack. Each card stays a full-viewport pin;
+         we only switch to top-anchored, overflow-visible so a tall card can
+         extend past the viewport (no clipping) while short cards still fill it.
+         Each card also gets a TOP STROKE + a soft drop shadow on its upper edge
+         so it reads as a distinct sheet rising over the section beneath it. */
+      .stack > .stack-card {
+        overflow: visible !important;
+        justify-content: flex-start;
+        padding: 92px 0 60px;
+        min-height: 100vh;            /* full viewport — preserved */
+        border-top: 1.5px solid var(--hairline-strong, rgba(0,0,0,0.22));
+        box-shadow: 0 -18px 38px -22px rgba(0,0,0,0.55);
+      }
+      [data-theme="light"] .stack > .stack-card {
+        border-top-color: rgba(0,0,0,0.16);
+        box-shadow: 0 -16px 34px -24px rgba(0,0,0,0.32);
+      }
+      .stack > .stack-card:first-child {
+        padding-top: 104px; border-top: none; box-shadow: none;
+      }
+      .stack > .stack-card--marquee { gap: 44px; justify-content: center; }
+
+      /* Selected-works card keeps its lifted grey surface (theme-aware) */
+      .stack > .stack-card[data-nav="works"] { background-color: var(--surface-1); }
+
+      /* Contact card: the horizontal sweep is disabled on mobile (it now rises
+         from the bottom like the others), so let it grow normally. The marquee
+         band sits at the top (its own margin clears the nav); the form follows. */
+      .stack > .stack-card--contact { overflow: visible !important; padding: 0 !important; }
+      .contact-slab { padding-top: 0 !important; min-height: 100vh; }
+      .contact-slab > .marquee-wrap { margin-top: 70px !important; }
+      .contact-slab .marquee-track .m { font-size: 30px !important; }
+      #contact { padding-top: 26px !important; padding-bottom: 36px !important; }
+      /* "hit me up" — drop the decorative bottom wireframe on narrow widths */
+      .cform .c-side .c-art { display: none !important; }
+      .cform { gap: 30px !important; }
+
+      /* the cursor glow is a desktop affordance — hide on touch widths */
+      .cursor-hatch, .cursor-halo, .cursor-ring { display: none !important; }
+
+      /* Footer — stack the divided bar into rows */
+      .site-footer { flex-direction: column; align-items: stretch; }
+      .foot-social { border-left: none !important; border-bottom: 1px solid var(--hairline); }
+      .foot-cell { flex: 1 1 0; width: auto !important; padding: 18px 8px !important; }
+      .foot-cell:last-child { border-right: none; }
+      .foot-center { padding: 22px 16px !important; border-bottom: 1px solid var(--hairline); }
+      .foot-up { width: 100%; justify-content: center; padding: 20px !important; }
+
+      /* Quote band — FIXED height (a definite red band, never auto-collapsing) */
+      .qband .qband-inner { height: 300px !important; padding-top: 30px; padding-bottom: 56px; }
+      .qband .q-text { font-size: 19px; }
+    }
+
+    /* --- Small phones --- */
+    @media (max-width: 460px) {
+      .container { padding: 0 18px; }
+      .announce { flex-wrap: wrap; gap: 10px; padding: 10px 12px; }
+      .announce .txt { font-size: 12px; }
+      .hero-cta-row { gap: 14px; }
+      .cform .c-side h2 { font-size: 52px !important; }
+      .foot-cell .caption { font-size: 10px; }
+      .qband .qband-inner { height: 320px !important; }
+    }  </style>
+  <script>
+    /* set theme before first paint to avoid a flash */
+    (function () {
+      try {
+        if (localStorage.getItem('salazar-theme') === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script>
+    /* Swallow the benign, harness-emitted "ResizeObserver loop completed with
+       undelivered notifications" notice (a no-op layout settle message — not an
+       error, no effect on rendering) so it doesn't surface as a console error. */
+    (function () {
+      var MSG = 'ResizeObserver loop';
+      window.addEventListener('error', function (e) {
+        if (e && e.message && e.message.indexOf(MSG) !== -1) {
+          e.stopImmediatePropagation(); e.preventDefault(); return false;
+        }
+      }, true);
+      var origErr = window.console && window.console.error;
+      if (origErr) {
+        window.console.error = function () {
+          var first = arguments[0];
+          if (typeof first === 'string' && first.indexOf(MSG) !== -1) return;
+          return origErr.apply(window.console, arguments);
+        };
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.18/dist/lenis.css" />
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+</head>
+<body>
+  <script>
+    /* Swallow the benign "ResizeObserver loop completed with undelivered
+       notifications" message — a harmless browser notification (not an error)
+       fired by observer/smooth-scroll libs; it has no effect on rendering. */
+    (function () {
+      var RO = 'ResizeObserver loop';
+      window.addEventListener('error', function (e) {
+        if (e && e.message && e.message.indexOf(RO) === 0) { e.stopImmediatePropagation(); e.preventDefault(); }
+      });
+    })();
+  </script>
+  <div class="cursor-halo" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <div class="cursor-hatch" aria-hidden="true"></div>
+  <div id="root"></div>
+
+  <script>
+    (function () {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var layer = document.querySelector('.cursor-hatch');
+      var halo  = document.querySelector('.cursor-halo');
+      var ring  = document.querySelector('.cursor-ring');
+      if (!layer) return;
+
+      var N = 9;
+      var HEAD_EASE = 0.10;
+      var LINK_EASE = 0.22;
+      var tx = -400, ty = -400;
+      var pts = [];
+      for (var i = 0; i < N; i++) pts.push({ x: -400, y: -400 });
+
+      var raf = null, hideT = null;
+
+      function compose() {
+        var pulse = 1 + 0.16 * Math.sin(Date.now() / 620);
+        var aPulse = 1 + 0.22 * Math.sin(Date.now() / 620);
+        var core = [], wide = [], stroke = [];
+        for (var i = 0; i < N; i++) {
+          var f = i / (N - 1);
+          var cx = pts[i].x.toFixed(1), cy = pts[i].y.toFixed(1);
+
+          var cr = Math.round((60 - f * 44) * pulse);
+          var cA = Math.min(1, (0.98 - f * 0.84) * aPulse).toFixed(3);
+          core.push('radial-gradient(' + cr + 'px circle at ' + cx + 'px ' + cy + 'px, ' +
+            'rgba(0,0,0,' + cA + ') 0%, rgba(0,0,0,' + (cA * 0.6).toFixed(3) + ') 55%, transparent 80%)');
+
+          var hr = Math.round((150 - f * 100) * pulse);
+          var hA = Math.min(1, (0.62 - f * 0.54) * aPulse).toFixed(3);
+          wide.push('radial-gradient(' + hr + 'px circle at ' + cx + 'px ' + cy + 'px, ' +
+            'rgba(0,0,0,' + hA + ') 0%, rgba(0,0,0,' + (hA * 0.45).toFixed(3) + ') 45%, transparent 72%)');
+
+          var rr = Math.round((150 - f * 100) * pulse);
+          var rA = Math.min(1, (0.8 - f * 0.7) * aPulse).toFixed(3);
+          stroke.push('radial-gradient(' + rr + 'px circle at ' + cx + 'px ' + cy + 'px, ' +
+            'transparent 56%, rgba(0,0,0,' + rA + ') 74%, transparent 92%)');
+        }
+        var mc = core.join(', '), mh = wide.join(', '), mr = stroke.join(', ');
+        layer.style.webkitMaskImage = mc; layer.style.maskImage = mc;
+        halo.style.webkitMaskImage = mh;  halo.style.maskImage = mh;
+        ring.style.webkitMaskImage = mr;  ring.style.maskImage = mr;
+      }
+
+      function tick() {
+        pts[0].x += (tx - pts[0].x) * HEAD_EASE;
+        pts[0].y += (ty - pts[0].y) * HEAD_EASE;
+        for (var i = 1; i < N; i++) {
+          pts[i].x += (pts[i - 1].x - pts[i].x) * LINK_EASE;
+          pts[i].y += (pts[i - 1].y - pts[i].y) * LINK_EASE;
+        }
+        compose();
+
+        var dx = tx - pts[N - 1].x, dy = ty - pts[N - 1].y;
+        if (layer.classList.contains('on') || dx * dx + dy * dy > 0.5) { raf = requestAnimationFrame(tick); }
+        else { raf = null; }
+      }
+
+      window.addEventListener('pointermove', function (e) {
+        if (e.pointerType === 'touch') return;
+        tx = e.clientX; ty = e.clientY;
+        layer.classList.add('on'); halo.classList.add('on'); ring.classList.add('on');
+        if (raf == null) raf = requestAnimationFrame(tick);
+        window.clearTimeout(hideT);
+        hideT = window.setTimeout(function () { layer.classList.remove('on'); halo.classList.remove('on'); ring.classList.remove('on'); }, 2600);
+      }, { passive: true });
+      window.addEventListener('pointerdown', function () { layer.classList.remove('on'); halo.classList.remove('on'); ring.classList.remove('on'); });
+    })();
+  </script>
+
+  <script>
+    /* Gentle scroll-linked drift on the hero globe. Desktop only — on mobile
+       the globe is a small static corner accent (sized purely by CSS), so we
+       must NOT write an inline transform here or it would override the
+       responsive scale and blow the globe back up to full size. */
+    (function () {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var art = null, ticking = false;
+      function isMobile() { return window.innerWidth <= 1000; }
+      function apply() {
+        ticking = false;
+        if (isMobile()) { if (art) art.style.transform = ''; return; }
+        if (!art) { art = document.querySelector('.hero-art'); if (!art) return; }
+        var y = window.scrollY || window.pageYOffset || 0;
+        var p = Math.min(1, y / (window.innerHeight || 800));
+        var ty = p * 180;
+        var sc = 1 + p * 0.6;
+        art.style.transform = 'translate3d(0,' + ty.toFixed(1) + 'px,0) scale(' + sc.toFixed(3) + ')';
+        art.style.opacity = (0.5 - p * 0.42).toFixed(3);
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(apply); }
+      }, { passive: true });
+      window.addEventListener('resize', apply, { passive: true });
+      apply();
+    })();
+  </script>
+
+  <script>
+    /* Lenis smooth scroll — desktop / fine-pointer only. On touch + narrow
+       (mobile) we keep native momentum scrolling, which feels better and is
+       the right call for the responsive layout. */
+    (function () {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+      if (!fine || window.innerWidth <= 768) return;
+      if (!window.Lenis) return;
+      var lenis = new Lenis({
+        duration: 1.1,
+        easing: function (t) { return 1 - Math.pow(1 - t, 3); },
+        smoothWheel: true,
+      });
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+      window.__lenis = lenis;
+    })();
+  </script>
+
+  <script>
+    (function () {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var px = [], ticking = false;
+
+      function scan() {
+        px = [].map.call(document.querySelectorAll('[data-parallax]'), function (el) {
+          return { el: el, k: parseFloat(el.getAttribute('data-parallax')) || 0.1 };
+        });
+        apply();
+      }
+      function setup() {
+        var root = document.getElementById('root');
+        if (!root || !root.children.length) { return setTimeout(setup, 60); }
+        scan();
+        var mo = new MutationObserver(function () { scan(); });
+        mo.observe(root, { childList: true, subtree: true });
+      }
+      function apply() {
+        ticking = false;
+        var vh = window.innerHeight || 800;
+        var y = window.scrollY || window.pageYOffset || 0;
+        document.body.style.backgroundPositionY = (y * 0.5).toFixed(1) + 'px';
+        for (var j = 0; j < px.length; j++) {
+          var r = px[j].el.getBoundingClientRect();
+          var fromCenter = (r.top + r.height / 2) - vh / 2;
+          var ty = (-fromCenter * px[j].k).toFixed(1);
+          px[j].el.style.transform = 'translate3d(0,' + ty + 'px,0)';
+        }
+      }
+      function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(apply); } }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      setup();
+    })();
+  </script>
+
+  <script>
+    /* Stacking interactions:
+       (1) hatch BACKGROUND PARALLAX — drift each card's diagonal weave with
+           scroll so the ground keeps moving even while a card is pinned.
+       (2) horizontal SLIDE — the contact slab sweeps in from the right as its
+           card scrolls up into the stack. */
+    (function () {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var cards = [], slab = null, ticking = false;
+
+      function scan() {
+        cards = [].slice.call(document.querySelectorAll('.stack-card'));
+        slab = document.querySelector('.contact-slab');
+      }
+      function apply() {
+        ticking = false;
+        var y = window.scrollY || window.pageYOffset || 0;
+        var vh = window.innerHeight || 800;
+        var drift = (y * 0.16).toFixed(1) + 'px';
+        for (var i = 0; i < cards.length; i++) cards[i].style.backgroundPositionY = drift;
+        if (slab) {
+          slab.style.backgroundPositionY = drift;
+          /* On mobile the contact card simply rises from the bottom like every
+             other card — no horizontal sweep. Clear any inline X transform. */
+          if (window.innerWidth <= 768) { slab.style.transform = 'none'; }
+          else {
+            var card = slab.parentNode;
+            var rect = card.getBoundingClientRect();
+            /* p: 0 when the card top sits at the viewport bottom, 1 once it has
+               risen to the top edge (fully pinned). */
+            var p = (vh - rect.top) / vh;
+            p = p < 0 ? 0 : (p > 1 ? 1 : p);
+            /* keep the slab parked off-right while the card's surface rises into
+               frame, then sweep it in horizontally over the last ~55% so the
+               dominant motion reads left-from-right, not diagonal. */
+            var s = (p - 0.45) / 0.55;
+            s = s < 0 ? 0 : (s > 1 ? 1 : s);
+            var e = 1 - Math.pow(1 - s, 3);              /* easeOutCubic */
+            slab.style.transform = 'translateX(' + ((1 - e) * 100).toFixed(2) + '%)';
+          }
+        }
+      }
+      function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(apply); } }
+      function setup() {
+        var root = document.getElementById('root');
+        if (!root || !root.children.length) { return setTimeout(setup, 60); }
+        scan();
+        new MutationObserver(scan).observe(root, { childList: true, subtree: true });
+        apply();
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      setup();
+    })();
+  </script>
+
+  <script>
+    /* Smooth-scroll a nav target to the scroll position where its card pins at
+       the top of the viewport. We accumulate offsetTop (which reflects flow
+       layout, immune to the sticky visual shift) so the target is correct even
+       when the card is currently pinned. Uses Lenis when present. */
+    window.salGoTo = function (id) {
+      var target;
+      if (id === 'home' || id === 'top' || !id) {
+        target = 0;
+      } else {
+        var el = document.querySelector('[data-nav="' + id + '"]') || document.getElementById(id);
+        if (!el) return;
+        var y = 0, n = el;
+        while (n) { y += n.offsetTop; n = n.offsetParent; }
+        target = y;
+      }
+      if (window.__lenis && window.__lenis.scrollTo) window.__lenis.scrollTo(target, { duration: 1.05 });
+      else window.scrollTo({ top: target, behavior: 'smooth' });
+    };
+  </script>
+
+  <script src="src/i18n.js"></script>
+  <script type="text/babel" src="src/tweaks-panel.jsx"></script>
+  <script type="text/babel" src="src/Icons.jsx"></script>
+  <script type="text/babel" src="src/LineArt.jsx"></script>
+  <script type="text/babel" src="src/Nav.jsx"></script>
+  <script type="text/babel" src="src/Hero.jsx"></script>
+  <script type="text/babel" src="src/About.jsx"></script>
+  <script type="text/babel" src="src/Works.jsx"></script>
+  <script type="text/babel" src="src/QuoteBand.jsx"></script>
+  <script type="text/babel" src="src/Marquee.jsx"></script>
+  <script type="text/babel" src="src/Contact.jsx"></script>
+  <script type="text/babel" src="src/Footer.jsx"></script>
+
+  <script type="text/babel" data-presets="react">
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "stacking": "on"
+    }/*EDITMODE-END*/;
+
+    function Toast({ msg }) {
+      if (!msg) return null;
+      return (
+        <div style={{
+          position: 'fixed', bottom: 28, left: '50%', transform: 'translateX(-50%)',
+          background: 'var(--accent-red)', color: 'var(--on-accent)', padding: '14px 22px',
+          fontSize: 13, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', zIndex: 100,
+        }}>{msg}</div>
+      );
+    }
+
+    function App() {
+      const [tw, setTweak] = useTweaks(TWEAK_DEFAULTS);
+      const [toast, setToast] = React.useState('');
+      const [lang, setLang] = React.useState(function () {
+        try { return localStorage.getItem('salazar-lang') || 'en'; } catch (e) { return 'en'; }
+      });
+      const [theme, setTheme] = React.useState(function () {
+        return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      });
+
+      React.useEffect(function () {
+        try { localStorage.setItem('salazar-lang', lang); } catch (e) {}
+        document.documentElement.lang = lang;
+      }, [lang]);
+
+      React.useEffect(function () {
+        if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        else document.documentElement.removeAttribute('data-theme');
+        try { localStorage.setItem('salazar-theme', theme); } catch (e) {}
+      }, [theme]);
+
+      const toggleTheme = () => setTheme((p) => (p === 'light' ? 'dark' : 'light'));
+
+      const onNav = (where) => {
+        setToast('→ ' + where);
+        window.clearTimeout(window.__t);
+        window.__t = window.setTimeout(() => setToast(''), 1400);
+      };
+
+      const stacked = tw.stacking !== 'off';
+
+      return (
+        <window.LangCtx.Provider value={{ lang: lang, setLang: setLang }}>
+          <Nav onNav={onNav} lang={lang} setLang={setLang} theme={theme} toggleTheme={toggleTheme} />
+          <Hero onNav={onNav} />
+          <QuoteBand />
+          <div className={'stack' + (stacked ? '' : ' no-stack')}>
+            <div className="stack-card" data-nav="about"><About onNav={onNav} /></div>
+            <div className="stack-card" data-nav="works"><Works onNav={onNav} /></div>
+            <div className="stack-card stack-card--contact" data-nav="contact">
+              <div className="contact-slab">
+                <Marquee />
+                <Contact onNav={onNav} />
+                <Footer />
+              </div>
+            </div>
+          </div>
+          <Toast msg={toast} />
+          <TweaksPanel title="Tweaks">
+            <TweakSection label="Scroll" />
+            <TweakRadio label="Stacking" value={stacked ? 'on' : 'off'}
+              options={[{ value: 'on', label: 'Stacked' }, { value: 'off', label: 'Linear' }]}
+              onChange={(v) => setTweak('stacking', v)} />
+            <TweakSection label="Appearance" />
+            <TweakRadio label="Theme" value={theme}
+              options={[{ value: 'dark', label: 'Dark' }, { value: 'light', label: 'Light' }]}
+              onChange={setTheme} />
+          </TweaksPanel>
+        </window.LangCtx.Provider>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

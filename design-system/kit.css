@@ -1,0 +1,144 @@
+/* Salazar Portfolio — UI Kit shared styles.
+   Builds on ../../colors_and_type.css tokens. Black canvas, one red,
+   hard rectangles + true circles, hairline borders, no shadows. */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+html { background: var(--canvas); }
+#root { position: relative; z-index: 1; }
+body {
+  background-color: transparent;
+  background-image: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 13px);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+#root { overflow-x: hidden; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+/* ---- Eyebrow / section label + red hatch ---- */
+.kit-label {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-size: 13px; font-weight: 600; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--ink);
+}
+.hatch { display: flex; gap: 4px; }
+.hatch i { display: block; width: 4px; height: 16px; background: var(--accent-red); transform: skewX(-20deg); }
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 14px 24px; font-family: var(--font-body);
+  font-size: 14px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; border: 1px solid transparent;
+  border-radius: 0; cursor: pointer; transition: transform .12s ease, background .15s ease, border-color .15s ease;
+  background: none; color: var(--ink);
+}
+.btn-primary { background: var(--accent-red); color: var(--on-accent); }
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-primary:active { transform: scale(.97); filter: brightness(.92); }
+.btn-outline { background: transparent; border-color: var(--hairline); color: var(--ink); }
+.btn-outline:hover { border-color: var(--ink-muted); }
+.btn-outline:active { transform: scale(.97); }
+.btn .dot { width: 8px; height: 8px; border-radius: 9999px; background: currentColor; }
+.btn svg { width: 16px; height: 16px; }
+
+/* ---- Nav chip ---- */
+.chip {
+  padding: 12px 18px; border: 1px solid var(--hairline); border-radius: 0;
+  font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--ink); background: none; cursor: pointer; transition: border-color .15s ease, color .15s ease;
+}
+.chip:hover { border-color: var(--ink-muted); }
+
+/* ---- Full-bleed nav: corner boxes + divided text items ---- */
+.nav-corner {
+  display: flex; align-items: center; justify-content: center;
+  background: none; color: var(--ink); border: none; cursor: pointer; transition: background .15s ease;
+}
+.nav-corner:hover { background: var(--surface-1); }
+.nav-item {
+  flex: 1; background: none; border: none; cursor: pointer; color: var(--ink);
+  font-family: var(--font-body); font-size: 13px; font-weight: 600; letter-spacing: 4px;
+  text-transform: uppercase; transition: color .15s ease, background .15s ease;
+}
+.nav-item:hover { color: var(--accent-red); background: var(--surface-1); }
+
+/* ---- Red chevron run (the "who am i" accent) ---- */
+.red-chevrons { display: inline-flex; align-items: center; color: var(--accent-red); }
+.red-chevrons svg { width: 26px; height: 26px; margin-left: -10px; }
+
+/* ---- CTA banner crosshair glyph ---- */
+.cta-banner { padding: 16px 30px; font-size: 18px; gap: 14px; }
+.crosshair {
+  display: inline-block; width: 16px; height: 16px; border-radius: 9999px;
+  border: 2px solid currentColor; position: relative;
+}
+.crosshair::before, .crosshair::after {
+  content: ''; position: absolute; background: currentColor;
+}
+.crosshair::before { left: 50%; top: -5px; bottom: -5px; width: 2px; transform: translateX(-50%); }
+.crosshair::after { top: 50%; left: -5px; right: -5px; height: 2px; transform: translateY(-50%); }
+
+/* ---- Icon box ---- */
+.iconbox {
+  width: 46px; height: 46px; border: 1px solid var(--hairline);
+  display: flex; align-items: center; justify-content: center; border-radius: 0;
+  background: none; color: var(--ink); cursor: pointer; transition: border-color .15s ease;
+}
+.iconbox:hover { border-color: var(--ink-muted); }
+.iconbox svg { width: 20px; height: 20px; }
+
+/* ---- Outline display type ---- */
+.outline-type {
+  color: transparent; -webkit-text-stroke: 1.5px var(--ink);
+}
+
+/* ---- Carousel dots ---- */
+.dots { display: flex; gap: 9px; align-items: center; }
+.dots .d { width: 9px; height: 9px; border-radius: 9999px; border: 1px solid currentColor; cursor: pointer; padding: 0; background: none; }
+.dots .d.on { background: currentColor; }
+
+/* ---- Marquee ---- */
+.marquee-wrap { overflow: hidden; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0; }
+.marquee-track { display: inline-flex; align-items: center; gap: 30px; white-space: nowrap; will-change: transform; animation: marq 22s linear infinite; }
+.marquee-track .m { font-size: 52px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+.marquee-track .sep { color: var(--accent-red); font-weight: 900; }
+@keyframes marq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+
+/* ---- Works rows ---- */
+.works-row {
+  display: flex; align-items: center; gap: 24px; padding: 28px 20px;
+  border-bottom: 1px solid var(--hairline); cursor: pointer;
+  transition: background .15s ease;
+}
+.works-row:hover { background: var(--surface-1); }
+
+/* cursor-following 1:1 project preview (persistent; toggled via .is-on) */
+.work-preview {
+  position: fixed; z-index: 60; width: 244px; height: 244px;
+  pointer-events: none; transform: translate(28px, -50%) scale(.94);
+  border: 1px solid var(--hairline); background: #0D0D0D; overflow: hidden;
+  opacity: 0; transition: opacity .22s ease, transform .22s ease;
+}
+.work-preview.is-on { opacity: 1; transform: translate(28px, -50%) scale(1); }
+.work-preview .pv-img { position: absolute; inset: 0; }
+.work-preview .pv-0 { background: repeating-linear-gradient(135deg,#1c1c1c 0 2px, transparent 2px 11px), linear-gradient(180deg,#202020,#0d0d0d); }
+.work-preview .pv-1 { background: repeating-linear-gradient(45deg,#1c1c1c 0 2px, transparent 2px 11px), radial-gradient(120% 90% at 30% 20%, #232323, #0d0d0d 65%); }
+.work-preview .pv-2 { background: repeating-linear-gradient(0deg,#1c1c1c 0 2px, transparent 2px 13px), linear-gradient(120deg,#1e1e1e,#0d0d0d); }
+.work-preview .pv-3 { background: repeating-linear-gradient(90deg,#1c1c1c 0 2px, transparent 2px 13px), radial-gradient(120% 90% at 70% 80%, #242424, #0d0d0d 65%); }
+.work-preview .pv-meta {
+  position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 3px;
+  padding: 14px 14px; background: linear-gradient(180deg, transparent, rgba(13,13,13,.92) 55%);
+}
+.work-preview .pv-idx { font-family: var(--font-display); font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--accent-red); }
+.work-preview .pv-title { font-family: var(--font-display); font-size: 19px; font-weight: 800; letter-spacing: -.3px; text-transform: uppercase; color: #fff; }
+.work-preview .pv-tag { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,.6); }
+.works-row:first-child { border-top: 1px solid var(--hairline); }
+.works-row .w-title { font-size: 28px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; flex: 0 0 320px; transition: color .15s ease; }
+.works-row .w-meta { font-size: 14px; font-weight: 500; color: var(--ink-muted); flex: 1; }
+.works-row .w-arrow svg { width: 28px; height: 28px; transition: color .15s ease, transform .2s ease; }
+.works-row:hover .w-arrow svg { color: var(--accent-red); transform: rotate(-45deg); }
+.works-row.is-active .w-arrow svg { color: var(--accent-red); }

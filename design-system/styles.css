@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Salazar Portfolio — Design System entry point
+   --------------------------------------------------------------------------
+   Single stylesheet consumers link. Imports the full cascade in order:
+     1 · foundations  — color + type tokens, @font-face
+     2 · kit          — black canvas, one red, hard rects, hairlines, buttons
+     3 · synthesis    — Vercel-reskinned components + SpaceX overlay/photo band
+   ========================================================================== */
+
+@import url("./colors_and_type.css");
+@import url("./ui_kits/portfolio/kit.css");
+@import url("./ui_kits/portfolio/synthesis.css");
