@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Alejandro Salazar — Growth UX/UI Designer &amp; Email Marketer</title>
-  <link rel="stylesheet" href="_ds/salazar-portfolio-design-system-bfe2f621-a0a1-4ba4-9cd6-7764c1c96089/styles.css" />
+  <link rel="stylesheet" href="design-system/styles.css" />
   <style id="custom-overrides">
     /* ============================================================
        STICKY STACK
@@ -70,7 +70,7 @@
        in every section, not only the hero. The cards create stacking contexts
        at z 1–5; the fixed cursor layers default to z 0 and get buried. Lift
        them to z 6 (still under the nav at z 50). */
-    .cursor-hatch, .cursor-halo, .cursor-ring { z-index: 6 !important; }
+    .cursor-hatch, .cursor-halo, .cursor-ring { z-index: 6 !important; mix-blend-mode: screen; }
 
     /* nav link interactions — guarantee the hover colour + a hover underline
        (the active-link underline is driven by the scroll-spy in Nav.jsx). */
@@ -91,8 +91,8 @@
     /* the marquee now bands the TOP of the "hit me up" (contact) section — a
        full-bleed hairline band sitting just under the nav, with the booking
        form centred in the space below it and the footer pinned to the floor. */
-    .contact-slab > .marquee-wrap { margin-top: 78px; }
-    .contact-slab .marquee-track .m { font-size: clamp(40px, 4.6vw, 60px); }
+    .stack-card--contact > .marquee-wrap { margin-top: 78px; }
+    .stack-card--contact .marquee-track .m { font-size: clamp(40px, 4.6vw, 60px); }
 
     /* contact + footer — its own card that SWEEPS IN HORIZONTALLY from the
        right as you scroll into it, on the SAME pure-black header ground (canvas)
@@ -110,7 +110,8 @@
     }
     .contact-slab {
       width: 100%;
-      min-height: 100vh;
+      flex: 1 1 auto;
+      min-height: 0;
       display: flex;
       flex-direction: column;
       background-color: var(--canvas);
@@ -128,10 +129,23 @@
        form content is on a given viewport */
     .contact-slab > footer { margin-top: auto; }
 
+    /* "Get Started" already-on-contact pulse — inset red glow, 2 beats */
+    @keyframes sal-contact-pulse {
+      0%,100% { box-shadow: inset 0 0 80px 0 rgba(255,40,0,0), inset 0 0 0 0 rgba(255,40,0,0); }
+      20%     { box-shadow: inset 0 0 120px 20px rgba(255,40,0,0.2), inset 0 0 0 2px rgba(255,40,0,0.6); }
+      40%     { box-shadow: inset 0 0 80px 0 rgba(255,40,0,0), inset 0 0 0 0 rgba(255,40,0,0); }
+      65%     { box-shadow: inset 0 0 100px 15px rgba(255,40,0,0.13), inset 0 0 0 2px rgba(255,40,0,0.38); }
+      85%     { box-shadow: inset 0 0 80px 0 rgba(255,40,0,0), inset 0 0 0 0 rgba(255,40,0,0); }
+    }
+    .stack-card--contact.contact-pulse::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 10;
+      animation: sal-contact-pulse 1.5s ease-out forwards;
+    }
+
     /* opt-out: Tweaks "Stacking → Off" reverts to plain stacked scroll */
     .stack.no-stack > .stack-card { position: static; min-height: 0; padding-top: 90px; padding-bottom: 90px; }
     .stack.no-stack > .stack-card--contact { padding: 0; overflow: visible; }
-    .stack.no-stack .contact-slab { transform: none !important; min-height: 0; padding-top: 60px; border-left: none; }
+    .stack.no-stack .contact-slab { transform: none !important; min-height: 0; border-left: none; }
 
     /* ============================================================
        RESPONSIVE
@@ -231,9 +245,9 @@
          from the bottom like the others), so let it grow normally. The marquee
          band sits at the top (its own margin clears the nav); the form follows. */
       .stack > .stack-card--contact { overflow: visible !important; padding: 0 !important; }
-      .contact-slab { padding-top: 0 !important; min-height: 100vh; }
-      .contact-slab > .marquee-wrap { margin-top: 70px !important; }
-      .contact-slab .marquee-track .m { font-size: 30px !important; }
+      .contact-slab { padding-top: 0 !important; flex: 1 1 auto; min-height: 0; }
+      .stack-card--contact > .marquee-wrap { margin-top: 70px !important; }
+      .stack-card--contact .marquee-track .m { font-size: 30px !important; }
       #contact { padding-top: 26px !important; padding-bottom: 36px !important; }
       /* "hit me up" — drop the decorative bottom wireframe on narrow widths */
       .cform .c-side .c-art { display: none !important; }
@@ -534,9 +548,13 @@
 
   <script>
     /* Smooth-scroll a nav target to the scroll position where its card pins at
-       the top of the viewport. We accumulate offsetTop (which reflects flow
-       layout, immune to the sticky visual shift) so the target is correct even
-       when the card is currently pinned. Uses Lenis when present. */
+       the top of the viewport. Uses Lenis when present.
+
+       For sticky stack cards, offsetTop can report 0 (the stuck visual position)
+       instead of the flow position when the card is currently pinned. To stay
+       correct in both directions: get .stack's absolute top via
+       getBoundingClientRect + scrollY (reliable on a non-sticky element), then
+       sum the offsetHeights of preceding siblings for the card's flow offset. */
     window.salGoTo = function (id) {
       var target;
       if (id === 'home' || id === 'top' || !id) {
@@ -544,12 +562,32 @@
       } else {
         var el = document.querySelector('[data-nav="' + id + '"]') || document.getElementById(id);
         if (!el) return;
-        var y = 0, n = el;
-        while (n) { y += n.offsetTop; n = n.offsetParent; }
-        target = y;
+        var stack = typeof el.closest === 'function' ? el.closest('.stack') : null;
+        if (stack) {
+          var sy = window.scrollY || window.pageYOffset || 0;
+          var stackAbsTop = stack.getBoundingClientRect().top + sy;
+          var cardFlowTop = 0;
+          var sib = stack.firstElementChild;
+          while (sib && sib !== el) { cardFlowTop += sib.offsetHeight; sib = sib.nextElementSibling; }
+          target = stackAbsTop + cardFlowTop;
+        } else {
+          var y = 0, n = el;
+          while (n) { y += n.offsetTop; n = n.offsetParent; }
+          target = y;
+        }
       }
       if (window.__lenis && window.__lenis.scrollTo) window.__lenis.scrollTo(target, { duration: 1.05 });
       else window.scrollTo({ top: target, behavior: 'smooth' });
+    };
+
+    /* Pulse the contact card when "Get Started" is clicked while already there */
+    window.salPulseContact = function () {
+      var el = document.querySelector('.stack-card--contact');
+      if (!el) return;
+      el.classList.remove('contact-pulse');
+      void el.offsetWidth; /* restart animation if triggered twice */
+      el.classList.add('contact-pulse');
+      el.addEventListener('animationend', function () { el.classList.remove('contact-pulse'); }, { once: true });
     };
   </script>
 
@@ -622,8 +660,8 @@
             <div className="stack-card" data-nav="about"><About onNav={onNav} /></div>
             <div className="stack-card" data-nav="works"><Works onNav={onNav} /></div>
             <div className="stack-card stack-card--contact" data-nav="contact">
+              <Marquee />
               <div className="contact-slab">
-                <Marquee />
                 <Contact onNav={onNav} />
                 <Footer />
               </div>

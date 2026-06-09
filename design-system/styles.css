@@ -8,5 +8,5 @@
    ========================================================================== */
 
 @import url("./colors_and_type.css");
-@import url("./ui_kits/portfolio/kit.css");
-@import url("./ui_kits/portfolio/synthesis.css");
+@import url("./kit.css");
+@import url("./synthesis.css");

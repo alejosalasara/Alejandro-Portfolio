@@ -2,7 +2,19 @@
   "permissions": {
     "allow": [
       "Bash(gh auth *)",
-      "PowerShell(gh auth status)"
+      "PowerShell(gh auth status)",
+      "Bash(ls /mnt/)",
+      "Read(//c/Users//**)",
+      "Read(//c/Users/Usuario/Downloads//**)",
+      "Bash(cp *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(start *)",
+      "Bash(python -m http.server 3000)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(Get-ChildItem -Path \"A:\\\\Alejandro\" -Recurse -Directory -Filter \"*design_handoff*\" -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object FullName)",
+      "PowerShell(Compare-Object *)"
     ]
   }
 }

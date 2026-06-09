@@ -108,7 +108,11 @@ function Nav({ onNav, lang, setLang, theme, toggleTheme }) {
         ))}
       </div>
       <div className="snav-right">
-        <button className="snav-cta" onClick={() => { window.salGoTo && window.salGoTo('contact'); onNav && onNav('contact'); }}>
+        <button className="snav-cta" onClick={() => {
+          if (active === 'contact') { window.salPulseContact && window.salPulseContact(); }
+          else { window.salGoTo && window.salGoTo('contact'); }
+          onNav && onNav('contact');
+        }}>
           {t('nav.cta')} <Icon name="arrow-up-right" size={15} />
         </button>
         <NavLangMenu value={lang} onChange={setLang} />
