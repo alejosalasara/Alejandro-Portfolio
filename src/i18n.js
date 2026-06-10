@@ -38,7 +38,7 @@ window.STRINGS = {
     'price.f.multi': 'Multi-brand kits', 'price.f.white': 'White-label', 'price.f.ded': 'Dedicated engineer',
 
     'testi.label': 'what cool people have to say', 'testi.portrait': 'portrait',
-    'quote.0.q': 'Dying before you die is the hardest and most important work that you can do if you want to truly live and truly lead.', 'quote.0.by': 'Fred Kofman.',
+    'quote.0.q': 'Form follows function.', 'quote.0.by': 'Louis Sullivan.',
     'quote.1.q': 'Design is not just what it looks like and feels like. Design is how it works.', 'quote.1.by': 'Steve Jobs.',
     'quote.2.q': 'Simplicity is about subtracting the obvious and adding the meaningful.', 'quote.2.by': 'John Maeda.',
     'testi.0.role': 'Tesla CEO', 'testi.0.q': 'Alejandro, your multifaceted expertise in UX engineering, Front End wizardry, and graphic design is simply out of this world — fitting, considering where I plan to take you. Yes, Alejandro, I\u2019m talking about Mars. Your talent knows no bounds, and I believe your skills will be invaluable in shaping the digital landscapes of our interplanetary future.',
@@ -101,7 +101,7 @@ window.STRINGS = {
     'price.f.multi': 'Kits multi-marca', 'price.f.white': 'Marca blanca', 'price.f.ded': 'Ingeniero dedicado',
 
     'testi.label': 'lo que dice la gente cool', 'testi.portrait': 'retrato',
-    'quote.0.q': 'Morir antes de morir es el trabajo más difícil e importante que puedes hacer si quieres vivir de verdad y liderar de verdad.', 'quote.0.by': 'Fred Kofman.',
+    'quote.0.q': 'La forma sigue a la función.', 'quote.0.by': 'Louis Sullivan.',
     'quote.1.q': 'El diseño no es solo cómo se ve y cómo se siente. El diseño es cómo funciona.', 'quote.1.by': 'Steve Jobs.',
     'quote.2.q': 'La simplicidad consiste en restar lo obvio y sumar lo significativo.', 'quote.2.by': 'John Maeda.',
     'testi.0.role': 'CEO de Tesla', 'testi.0.q': 'Alejandro, tu experiencia multifacética en ingeniería UX, magia del Front End y diseño gráfico está simplemente fuera de este mundo — apropiado, considerando a dónde planeo llevarte. Sí, Alejandro, hablo de Marte. Tu talento no conoce límites, y creo que tus habilidades serán invaluables para dar forma a los paisajes digitales de nuestro futuro interplanetario.',
