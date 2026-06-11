@@ -1,0 +1,90 @@
+/* ==========================================================================
+   Slat Shutter — page-transition loader
+   --------------------------------------------------------------------------
+   Salazar Portfolio design language: black + one structural red, hard
+   rectangles, oversized Stara display type, hairline seams, no shadows.
+
+   This stylesheet is the SINGLE source of truth for the loader's look.
+   The JS module (slat-shutter.js) only toggles classes + sets per-slat
+   transform-origin / transition-duration / transition-delay inline (so the
+   stagger works for any slat count). Restyle here, wire there.
+
+   THEMING — override these on .slsh or :root:
+     --slsh-color   field colour            (default: --accent-red / #FF2800)
+     --slsh-ink     text + chrome on field  (default: --on-accent / #FFFFFF)
+     --slsh-z       stacking order          (default: 9000, set via JS opt)
+     --slsh-seam    hairline between slats   (default: rgba(0,0,0,.18))
+   Type inherits --font-display (Stara) when present, else system sans.
+   ========================================================================== */
+
+.slsh {
+  position: fixed;
+  inset: 0;
+  z-index: var(--slsh-z, 9000);
+  pointer-events: none;
+  visibility: hidden;
+  --slsh-color: var(--accent-red, #FF2800);
+  --slsh-ink:   var(--on-accent, #FFFFFF);
+  --slsh-seam:  rgba(0, 0, 0, 0.18);
+}
+/* JS adds .is-active for the whole gesture; .is-covered once the field is shut */
+.slsh.is-active { visibility: visible; pointer-events: auto; }
+/* Lock scroll on whichever page hosts the active shutter, without collapsing the gutter */
+html:has(.slsh.is-active) { overflow-y: scroll !important; }
+body:has(.slsh.is-active) { overflow: hidden !important; }
+
+/* ---------- the slats ---------- */
+.slsh__slats { position: absolute; inset: 0; display: flex; }
+.slsh__slat {
+  flex: 1 1 0;
+  height: 100%;                 /* explicit — never rely on flex cross-stretch */
+  background: var(--slsh-color);
+  transform: scaleY(0);
+  transform-origin: top;        /* JS overrides per-slat + per-phase */
+  will-change: transform;
+}
+.slsh__slat + .slsh__slat { border-left: 1px solid var(--slsh-seam); }
+/* JS toggles .is-up to drive the scale; the transition itself is set inline */
+.slsh__slat.is-up { transform: scaleY(1); }
+
+/* ---------- the lockup (destination name) ---------- */
+.slsh__card {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px; padding: 6vw; text-align: center;
+  color: var(--slsh-ink);
+  font-family: var(--font-display, system-ui, -apple-system, sans-serif);
+  opacity: 0;
+  transition: opacity .22s ease;
+}
+.slsh.is-covered .slsh__card { opacity: 1; }
+
+.slsh__eyebrow { font-size: clamp(9px, 1.1vw, 12px); font-weight: 600; letter-spacing: 4px; text-transform: uppercase; opacity: 0.8; }
+.slsh__name {
+  font-size: clamp(40px, 9vw, 108px); font-weight: 900; letter-spacing: -0.03em; line-height: 0.9;
+  transform: scale(0.94);
+  transition: transform .34s cubic-bezier(.76, 0, .16, 1);
+}
+.slsh.is-covered .slsh__name { transform: scale(1); }
+.slsh__idx { font-size: clamp(9px, 1.1vw, 12px); font-weight: 600; letter-spacing: 4px; }
+.slsh__name:empty, .slsh__idx:empty, .slsh__eyebrow:empty { display: none; }
+
+/* ---------- corner tick chrome (optional, opts.chrome) ---------- */
+.slsh__chrome { position: absolute; inset: clamp(22px, 3.4vw, 44px); pointer-events: none; opacity: 0; transition: opacity .22s ease; }
+.slsh.is-covered .slsh__chrome { opacity: 1; }
+.slsh__tick { position: absolute; width: 13px; height: 13px; }
+.slsh__tick::before, .slsh__tick::after { content: ""; position: absolute; background: var(--slsh-ink); }
+.slsh__tick::before { width: 13px; height: 1px; top: 0; }
+.slsh__tick::after  { width: 1px; height: 13px; left: 0; }
+.slsh__tick--tr { right: 0; transform: scaleX(-1); }
+.slsh__tick--bl { bottom: 0; transform: scaleY(-1); }
+.slsh__tick--br { right: 0; bottom: 0; transform: scale(-1); }
+.slsh__meta { position: absolute; font-size: clamp(8px, 1vw, 11px); font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--slsh-ink); }
+.slsh__meta--tl { top: -2px; left: 24px; }
+.slsh__meta--br { bottom: -2px; right: 24px; }
+
+/* ---------- reduced motion: keep the cover (so navigation still reads) but
+   drop the staggered animation — JS also zeroes durations. ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .slsh__slat, .slsh__name { transition: none !important; }
+}

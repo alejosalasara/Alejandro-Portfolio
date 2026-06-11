@@ -64,12 +64,11 @@ function Hero({ onNav }) {
       </div>
 
       <div className="hero-inner container">
-        <button className="announce" onClick={() => { window.location.hash = 'works'; }}
-          style={{ cursor: 'pointer' }}>
+        <div className="announce">
           <span className="tag">{t('hero.tag')}</span>
           <span className="txt">case studies live — <span className="announce-case" ref={caseRef}>{CASE_NAMES[caseIdx]}</span></span>
           <span className="arr"><Icon name="arrow-right" size={15} /></span>
-        </button>
+        </div>
 
         <span className="tech-eyebrow" style={{ marginTop: 26 }}>
           <span className="idx">01</span> {t('hero.eyebrow')}
@@ -83,7 +82,7 @@ function Hero({ onNav }) {
         </h1>
 
         <div className="hero-cta-row">
-          <button className="btn btn-outline" onClick={() => { window.location.hash = 'works'; }}>
+          <button className="btn btn-outline" onClick={() => { window.salGoTo && window.salGoTo('works'); }}>
             {t('hero.cta')} <Icon name="arrow-right" size={16} />
           </button>
           <span className="scroll-note">{t('hero.scroll')}</span>

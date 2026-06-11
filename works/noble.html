@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Noble · Case Study · Alejandro Salazar</title>
+  <link rel="stylesheet" href="../design-system/colors_and_type.css" />
+  <link rel="stylesheet" href="../design-system/kit.css" />
+  <link rel="stylesheet" href="../design-system/synthesis.css" />
+  <link rel="stylesheet" href="deck.css?v=2" />
+  <link rel="stylesheet" href="../src/slat-shutter.css" />
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('salazar-theme') === 'light')
+          document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    .bk-label-s { display: none; }
+    .swipe-pulse {
+      position: fixed; inset: 0;
+      z-index: 42; pointer-events: none; display: none;
+      background: linear-gradient(to left, var(--accent-red), transparent 40%);
+      animation: swipe-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes swipe-pulse {
+      0%, 100% { opacity: 0.03; }
+      50%       { opacity: 0.22; }
+    }
+    @media (max-width: 900px) {
+      .card-pad { max-width: 100% !important; padding-left: 16px !important; padding-right: 16px !important; }
+      .body-copy, .lede, .cover-lede { max-width: 100% !important; }
+      .bk-label   { display: none !important; }
+      .bk-label-s { display: inline !important; }
+      .hud-arrows { display: none !important; }
+      .hud-top {
+        background: rgba(13,13,13,0.55) !important;
+        backdrop-filter: blur(18px) saturate(135%) !important;
+        -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+        border-bottom: 1px solid var(--hairline) !important;
+        padding-top: 14px !important;
+        padding-bottom: 14px !important;
+      }
+      :root[data-theme="light"] .hud-top { background: rgba(244,244,241,0.62) !important; }
+      .shot { min-height: 200px !important; }
+      .hud-bot { padding-right: 0 !important; }
+      .swipe-pulse { display: block !important; visibility: hidden; }
+      body.is-first-card .swipe-pulse { visibility: visible !important; }
+    }
+    @media (hover: none) {
+      .flow { transition: background .2s !important; }
+      .flow:hover  { padding-left: 4px !important; }
+      .flow:active { background: var(--surface-1) !important; }
+    }
+    @media (max-width: 560px) {
+      .flow .f-name { min-width: 0 !important; }
+      .card-main { overflow-y: auto !important; scrollbar-gutter: stable !important; }
+    }
+    @media (max-height: 620px) {
+      .card-main { overflow-y: auto !important; scrollbar-gutter: stable !important; }
+    }
+    :root[data-theme="light"] .flow .f-num { color: var(--ink) !important; }
+    #visit-site .nl-arrow { transition: color .2s !important; }
+    #visit-site:hover .nl-arrow { transform: none !important; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="deck" id="deck" data-titles="solid" data-ghost="on">
+
+      <!-- 01 · COVER -->
+      <section class="card" data-label="cover" data-screen-label="01 Cover">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow cover-tag"><span class="idx">●</span> Case Study · Streetwear · Email</span>
+            <h1 class="cover-name">NOBLE</h1>
+            <p class="cover-lede">a streetwear label given a storefront with attitude, and a drop-driven email engine that sells out the run.</p>
+            <div class="cover-scope">
+              <span class="scope-chip is-fill">Website Design</span>
+              <span class="scope-chip">Email</span>
+              <span class="scope-year">2025 · D2C Apparel</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">01</div>
+      </section>
+
+      <!-- 02 · OVERVIEW -->
+      <section class="card" data-label="overview" data-screen-label="02 Overview">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">02</span> Overview</span>
+            <div class="split">
+              <div>
+                <h2 class="card-title">what is <span class="red">noble</span></h2>
+                <p class="body-copy" style="max-width:480px">Noble is a streetwear label that sells in drops: limited runs of tees, outerwear and accessories built around a strong visual point of view. A brand where the lookbook is the product and the launch moment is the business.</p>
+              </div>
+              <div class="meta-grid">
+                <div class="meta-cell"><span class="k">Sector</span><span class="v">Streetwear · Apparel</span></div>
+                <div class="meta-cell"><span class="k">Market</span><span class="v">D2C · drop model</span></div>
+                <div class="meta-cell"><span class="k">Catalog</span><span class="v">Tees · Outerwear · Accessories</span></div>
+                <div class="meta-cell"><span class="k">Channel</span><span class="v">Online store + email</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">02</div>
+      </section>
+
+      <!-- 03 · OBJECTIVE -->
+      <section class="card" data-label="objective" data-screen-label="03 Objective">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">03</span> Objective</span>
+            <h2 class="card-title">the objective</h2>
+            <p class="lede" style="margin-top:clamp(18px,2.6vh,28px)">a storefront with the brand's attitude, and an email engine that turns every drop into an event. <span class="mut">hype on launch, retention between.</span></p>
+            <div class="steps" style="margin-top:clamp(22px,3.4vh,40px)">
+              <div class="step">
+                <span class="s-num">01</span>
+                <div><h3 class="s-h">build for drops</h3><p class="s-b">a storefront that can stage a launch: countdown, sold-out states, waitlists, not just a static catalog.</p></div>
+              </div>
+              <div class="step">
+                <span class="s-num">02</span>
+                <div><h3 class="s-h">make the lookbook the hero</h3><p class="s-b">put the imagery and the point of view first; the product reads as culture, not commodity.</p></div>
+              </div>
+              <div class="step">
+                <span class="s-num">03</span>
+                <div><h3 class="s-h">own the launch moment</h3><p class="s-b">email that builds the list before a drop and converts it the minute the run goes live.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">03</div>
+      </section>
+
+      <!-- 04 · STACK -->
+      <section class="card" data-label="stack" data-screen-label="04 Stack">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">04</span> Stack</span>
+            <h2 class="card-title">the stack</h2>
+            <div class="split" style="margin-top:clamp(20px,3vh,34px)">
+              <div class="terminal">
+                <div class="term-bar">
+                  <div class="lights"><i class="on"></i><i></i><i></i></div>
+                  <span class="term-name">noble · build</span>
+                </div>
+                <div class="term-body">
+                  <div class="ln"><span class="prompt">›</span><span class="ok">tokens · figma → design variables</span></div>
+                  <div class="ln"><span class="prompt">›</span><span class="ok">storefront · drop-ready commerce</span></div>
+                  <div class="ln"><span class="prompt">›</span><span class="ok">email · klaviyo flows + segments</span></div>
+                  <div class="ln"><span class="prompt">›</span><span class="mut"># lookbook · countdown · waitlist</span></div>
+                  <div class="ln"><span class="prompt">›</span><span class="ok">measure · ga4 + launch events<span class="cursor"></span></span></div>
+                </div>
+              </div>
+              <div class="stack-list">
+                <div class="stack-row"><span class="sk">Design</span><span class="sv">Figma · tokens · <b>lookbook system</b></span></div>
+                <div class="stack-row"><span class="sk">Build</span><span class="sv">Drop-ready storefront · waitlists</span></div>
+                <div class="stack-row"><span class="sk">Email</span><span class="sv">Klaviyo · <b>flows, segments, A/B</b></span></div>
+                <div class="stack-row"><span class="sk">Content</span><span class="sv">Lookbook art direction</span></div>
+                <div class="stack-row"><span class="sk">Measure</span><span class="sv">GA4 · drop-launch events</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">04</div>
+      </section>
+
+      <!-- 05 · REDESIGN -->
+      <section class="card" data-label="redesign" data-screen-label="05 Redesign">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">05</span> Redesign</span>
+            <h2 class="card-title">the redesign</h2>
+            <p class="body-copy" style="max-width:600px">editorial, image-led, unapologetic. the lookbook drives the page and the drop page reads like a poster.</p>
+            <div class="split tight" style="margin-top:clamp(16px,2.4vh,26px);align-items:stretch;gap:clamp(16px,1.6vw,22px)">
+              <div class="shot" style="aspect-ratio:16/10" data-label="Home / lookbook · desktop">
+                <span class="px-tag">After</span>
+                <span class="cap">noble · lookbook</span>
+              </div>
+              <div style="display:grid;grid-template-rows:1fr 1fr;gap:clamp(16px,1.6vw,22px)">
+                <div class="shot" data-label="Product page · mobile"><span class="cap">PDP · mobile</span></div>
+                <div class="shot" data-label="Drop / launch page"><span class="cap">the drop</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">05</div>
+      </section>
+
+      <!-- 06 · EMAIL -->
+      <section class="card" data-label="email" data-screen-label="06 Email">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">06</span> Email</span>
+            <h2 class="card-title">the email</h2>
+            <p class="body-copy" style="max-width:600px">five flows build the list before a drop and convert it the moment it lands, then keep buyers warm until the next one.</p>
+            <div class="flows" style="margin-top:clamp(16px,2.4vh,26px)">
+              <div class="flow"><span class="f-num">01</span><span class="f-name">welcome</span><span class="f-desc">set the tone and hand new subscribers their first drop access.</span><span class="f-trig">on signup</span></div>
+              <div class="flow"><span class="f-num">02</span><span class="f-name">drop announce</span><span class="f-desc">countdown then go-live: the launch moment, sent to the whole list.</span><span class="f-trig">on drop</span></div>
+              <div class="flow"><span class="f-num">03</span><span class="f-name">abandoned cart</span><span class="f-desc">recover the size left in the cart before the run sells out.</span><span class="f-trig">checkout start</span></div>
+              <div class="flow"><span class="f-num">04</span><span class="f-name">post-purchase</span><span class="f-desc">thank, style and set up the next drop's anticipation.</span><span class="f-trig">on order</span></div>
+              <div class="flow"><span class="f-num">05</span><span class="f-name">win-back</span><span class="f-desc">re-engage lapsed buyers ahead of the next launch.</span><span class="f-trig">+45 days</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">06</div>
+      </section>
+
+      <!-- 07 · RESULTS -->
+      <section class="card" data-label="results" data-screen-label="07 Results">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">07</span> Results</span>
+            <h2 class="card-title">the results</h2>
+            <div class="metrics" style="margin-top:clamp(20px,3vh,36px)">
+              <div class="metric"><span class="m-val"><span class="u">+</span>52<span class="u">%</span></span><span class="m-k">launch-day revenue</span></div>
+              <div class="metric"><span class="m-val">3.1<span class="u">×</span></span><span class="m-k">email revenue</span></div>
+              <div class="metric"><span class="m-val"><span class="u">+</span>40<span class="u">%</span></span><span class="m-k">list growth / drop</span></div>
+              <div class="metric"><span class="m-val">5</span><span class="m-k">lifecycle flows live</span></div>
+            </div>
+            <span class="results-note"><span class="sq"></span> figures illustrative, swap for live analytics once connected.</span>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">07</div>
+      </section>
+
+      <!-- 08 · NEXT -->
+      <section class="card" data-label="next" data-screen-label="08 Next">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">08</span> Next</span>
+            <h2 class="card-title">what's next</h2>
+            <div class="next-wrap" style="margin-top:clamp(20px,3vh,36px)">
+              <button class="next-link" id="next-project" type="button">
+                <span><span class="nl-k">Next project</span><span class="nl-t">imfit</span></span>
+                <span class="nl-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+              </button>
+              <a class="next-link" id="visit-site" href="javascript:void(0)" target="_blank" rel="noopener noreferrer">
+                <span><span class="nl-k">live site</span><span class="nl-t">noble</span></span>
+                <span class="nl-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+              </a>
+              <button class="next-link" id="next-index" type="button">
+                <span><span class="nl-k">Index</span><span class="nl-t"></span></span>
+                <span class="nl-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">08</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div class="hud">
+    <div class="hud-bar hud-top">
+      <div class="hud-brand">
+        <button class="bk" id="hud-back" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12l6-6M5 12l6 6"/></svg>
+        </button>
+      </div>
+      <div class="hud-idx">
+        <span class="now" id="hud-now">01</span><span class="sep">/</span><span id="hud-total">08</span>
+        <span class="sect" id="hud-sect">COVER</span>
+      </div>
+    </div>
+    <div class="hud-bar hud-bot">
+      <div class="rail">
+        <div class="rail-track"></div>
+        <div class="rail-fill" id="rail-fill"></div>
+        <div class="rail-ticks">
+          <button class="rail-tick on" type="button" aria-label="Go to card 1"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 2"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 3"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 4"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 5"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 6"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 7"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 8"></button>
+        </div>
+      </div>
+      <div class="hud-arrows">
+        <button class="nav-btn" id="nav-prev" type="button" aria-label="Previous" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button class="nav-btn" id="nav-next" type="button" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="reel-flash" id="reel-flash" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i><i></i>
+  </div>
+
+  <div class="scroll-hint" id="scroll-hint" aria-hidden="true">
+    <span>scroll</span><span class="ln"></span><span>→</span>
+  </div>
+
+  <script src="deck.js?v=2"></script>
+  <script src="../src/slat-shutter.js"></script>
+  <script>
+    var shutter = new SlatShutter({ slatMs: 400, stagger: 50, holdMs: 100 });
+    shutter.revealOnLoad();
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) shutter._busy = false;
+    });
+
+    var _lang = 'en';
+    try { _lang = localStorage.getItem('salazar-lang') || 'en'; } catch (e) {}
+    var _backLabel = _lang === 'es' ? 'Trabajos seleccionados' : 'Selected Works';
+
+    function goHome() {
+      try { sessionStorage.setItem('salazar:returnTarget', 'works'); } catch (e) {}
+      shutter.navigate('../index.html', { name: _backLabel });
+    }
+
+    var back = document.getElementById('hud-back');
+    if (back) {
+      var spanFull = document.createElement('span');
+      spanFull.className = 'bk-label';
+      spanFull.textContent = _backLabel;
+      back.appendChild(spanFull);
+      var spanShort = document.createElement('span');
+      spanShort.className = 'bk-label-s';
+      spanShort.textContent = _lang === 'es' ? 'Regresar' : 'Go back';
+      back.appendChild(spanShort);
+      back.addEventListener('click', goHome);
+    }
+
+    var np = document.getElementById('next-project');
+    if (np) np.addEventListener('click', function () {
+      shutter.navigate('./imfit.html', { name: 'IMFIT' });
+    });
+
+    var ni = document.getElementById('next-index');
+    if (ni) {
+      var nlT = ni.querySelector('.nl-t');
+      if (nlT) nlT.textContent = _backLabel.toLowerCase();
+      ni.addEventListener('click', goHome);
+    }
+
+    if (_lang === 'es') {
+      function _t(sel, text) { var e = document.querySelector(sel); if (e) e.textContent = text; }
+      function _h(sel, html) { var e = document.querySelector(sel); if (e) e.innerHTML = html; }
+      function _tAll(sel, arr) { var es = document.querySelectorAll(sel); arr.forEach(function(v,i){ if(es[i]) es[i].textContent = v; }); }
+      function _hAll(sel, arr) { var es = document.querySelectorAll(sel); arr.forEach(function(v,i){ if(es[i]) es[i].innerHTML = v; }); }
+
+      // 01 Cover
+      _h('.cover-tag', '<span class="idx">●</span> Caso de Estudio · Streetwear · Email');
+      _t('.cover-lede', 'una marca de streetwear con una tienda de actitud, y un motor de email por drops que vende la tirada completa.');
+      var chips = document.querySelectorAll('.scope-chip');
+      if (chips[0]) chips[0].textContent = 'Diseño Web';
+      _t('.scope-year', '2025 · Apparel D2C');
+
+      // 02 Overview
+      _h('.card:nth-child(2) .c-eyebrow', '<span class="idx">02</span> Resumen');
+      _h('.card:nth-child(2) .card-title', 'qué es <span class="red">noble</span>');
+      _t('.card:nth-child(2) .body-copy', 'Noble es una marca de streetwear que vende en drops: ediciones limitadas de camisetas, ropa exterior y accesorios construidas sobre un fuerte punto de vista visual. Una marca donde el lookbook es el producto y el momento del lanzamiento es el negocio.');
+      _tAll('.meta-cell .k', ['Sector', 'Mercado', 'Catálogo', 'Canal']);
+      var mvs = document.querySelectorAll('.meta-cell .v');
+      if (mvs[1]) mvs[1].textContent = 'D2C · modelo drop';
+      if (mvs[3]) mvs[3].textContent = 'Tienda online + email';
+
+      // 03 Objective
+      _h('.card:nth-child(3) .c-eyebrow', '<span class="idx">03</span> Objetivo');
+      _t('.card:nth-child(3) .card-title', 'el objetivo');
+      _h('.card:nth-child(3) .lede', 'una tienda con la actitud de la marca, y un motor de email que convierte cada drop en un evento. <span class="mut">hype en el lanzamiento, retención entre drops.</span>');
+      _tAll('.s-h', ['construir para drops', 'hacer del lookbook el héroe', 'dueños del momento del lanzamiento']);
+      _tAll('.s-b', [
+        'una tienda que puede montar un lanzamiento: cuenta regresiva, estados de agotado, listas de espera, no solo un catálogo estático.',
+        'poner las imágenes y el punto de vista primero; el producto se lee como cultura, no como mercancía.',
+        'email que construye la lista antes de un drop y la convierte en el minuto que la tirada sale en vivo.'
+      ]);
+
+      // 04 Stack
+      _h('.card:nth-child(4) .c-eyebrow', '<span class="idx">04</span> Stack');
+      _t('.card:nth-child(4) .card-title', 'el stack');
+      _tAll('.ln .ok', [
+        'tokens · figma → variables de diseño',
+        'tienda · comercio listo para drops',
+        'email · flujos + segmentos klaviyo',
+        'medición · ga4 + eventos de lanzamiento'
+      ]);
+      _t('.ln .mut', '# lookbook · cuenta regresiva · lista de espera');
+      _tAll('.stack-row .sk', ['Diseño', 'Desarrollo', 'Email', 'Contenido', 'Medición']);
+      _hAll('.stack-row .sv', [
+        'Figma · tokens · <b>sistema lookbook</b>',
+        'Tienda para drops · listas de espera',
+        'Klaviyo · <b>flujos, segmentos, A/B</b>',
+        'Dirección de arte lookbook',
+        'GA4 · eventos de lanzamiento'
+      ]);
+
+      // 05 Redesign
+      _h('.card:nth-child(5) .c-eyebrow', '<span class="idx">05</span> Rediseño');
+      _t('.card:nth-child(5) .card-title', 'el rediseño');
+      _t('.card:nth-child(5) .body-copy', 'editorial, visual, sin disculpas. el lookbook dirige la página y la página del drop se lee como un póster.');
+      var shots5 = document.querySelectorAll('.card:nth-child(5) .shot');
+      if (shots5[0]) { shots5[0].setAttribute('data-label','Inicio / lookbook · escritorio'); shots5[0].querySelector('.px-tag') && (shots5[0].querySelector('.px-tag').textContent = 'Después'); shots5[0].querySelector('.cap') && (shots5[0].querySelector('.cap').textContent = 'noble · lookbook'); }
+      if (shots5[1]) { shots5[1].setAttribute('data-label','Página de producto · móvil'); shots5[1].querySelector('.cap') && (shots5[1].querySelector('.cap').textContent = 'PDP · móvil'); }
+      if (shots5[2]) { shots5[2].setAttribute('data-label','Página del drop / lanzamiento'); shots5[2].querySelector('.cap') && (shots5[2].querySelector('.cap').textContent = 'el drop'); }
+
+      // 06 Email
+      _h('.card:nth-child(6) .c-eyebrow', '<span class="idx">06</span> Email');
+      _t('.card:nth-child(6) .card-title', 'el email');
+      _t('.card:nth-child(6) .body-copy', 'cinco flujos construyen la lista antes de un drop y la convierten en el momento que llega, y mantienen a los compradores atentos hasta el siguiente.');
+      _tAll('.f-name', ['bienvenida', 'anuncio de drop', 'carrito abandonado', 'post-compra', 'reactivación']);
+      _tAll('.f-desc', [
+        'establecer el tono y dar a los nuevos suscriptores su primer acceso al drop.',
+        'cuenta regresiva y en vivo: el momento del lanzamiento, enviado a toda la lista.',
+        'recuperar la talla dejada en el carrito antes de que la tirada se agote.',
+        'agradecer, inspirar y preparar la anticipación por el próximo drop.',
+        'reactivar compradores inactivos antes del próximo lanzamiento.'
+      ]);
+      _tAll('.f-trig', ['al registrarse', 'en drop', 'inicio checkout', 'al pedir', '+45 días']);
+
+      // 07 Results
+      _h('.card:nth-child(7) .c-eyebrow', '<span class="idx">07</span> Resultados');
+      _t('.card:nth-child(7) .card-title', 'los resultados');
+      _tAll('.m-k', ['ingresos día de lanzamiento', 'ingresos email', 'crecimiento de lista / drop', 'flujos activos']);
+      _t('.results-note', ' cifras ilustrativas, reemplazar con analíticas en vivo una vez conectadas.');
+
+      // 08 Next
+      _h('.card:nth-child(8) .c-eyebrow', '<span class="idx">08</span> Siguiente');
+      _t('.card:nth-child(8) .card-title', 'qué sigue');
+      _t('.card:nth-child(8) #next-project .nl-k', 'Siguiente proyecto');
+      _t('#visit-site .nl-k', 'sitio web');
+
+      // Scroll hint
+      var sh = document.querySelector('.scroll-hint span');
+      if (sh) sh.textContent = 'desliza';
+
+      var labelMap = ['Portada','Resumen','Objetivo','Stack','Rediseño','Email','Resultados','Siguiente'];
+      document.querySelectorAll('.card').forEach(function(c, i) {
+        if (labelMap[i]) c.setAttribute('data-screen-label', (i+1 < 10 ? '0'+(i+1) : i+1) + ' ' + labelMap[i]);
+      });
+      var hudSect = document.getElementById('hud-sect');
+      if (hudSect) hudSect.textContent = labelMap[0].toUpperCase();
+    }
+  </script>
+</body>
+</html>

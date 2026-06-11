@@ -6,6 +6,7 @@
   <style>html,body{background:#0D0D0D;}#root{opacity:0;transition:opacity .4s ease;}</style>
   <title>Alejandro Salazar — Growth UX/UI Designer &amp; Email Marketer</title>
   <link rel="stylesheet" href="design-system/styles.css" />
+  <link rel="stylesheet" href="src/slat-shutter.css" />
   <style id="custom-overrides">
     /* ============================================================
        STICKY STACK
@@ -272,6 +273,7 @@
       .works-row .w-meta { flex: 1 1 auto !important; font-size: 11.5px; }
       .works-row .w-arrow { margin-left: auto; }
       .works-row .w-arrow svg { width: 22px; height: 22px; }
+      .works-row--stat { padding-left: 28px; }
 
       /* ---- KEEP the sticky card-stack. Each card stays a full-viewport pin;
          we only switch to top-anchored, overflow-visible so a tall card can
@@ -344,6 +346,9 @@
       } catch (e) {}
     })();
   </script>
+  <style>
+    @media (hover: none) { .work-preview { display: none !important; } }
+  </style>
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
@@ -372,6 +377,9 @@
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
   <style id="preloader">
     body.preloader-active { overflow: hidden; }
+    /* Returning via shutter: hide preloader and make root immediately visible */
+    body.shutter-return #preloader-stage { display: none; }
+    body.shutter-return #root { opacity: 1 !important; transition: none !important; }
 
     /* Hero entrance — hide elements while preloader runs, reveal with blur zoom-in */
     body.preloader-active .hero-inner > * { opacity: 0; }
@@ -396,7 +404,6 @@
     }
     #preloader-stage.leaving { opacity: 0; pointer-events: none; }
     #preloader-stage.ready { pointer-events: none; }
-    #preloader-stage.ready .p-cue { pointer-events: auto; }
 
     /* vertical split curtains */
     .p-curtain {
@@ -472,29 +479,8 @@
     .p-meta.bl { bottom: 7px; transform: translateY(50%); left: 28px; }
     .p-meta.br { bottom: 7px; transform: translateY(50%); right: 28px; }
 
-    /* scroll cue — above chrome, appears only in ready state */
-    .p-cue {
-      position: absolute; bottom: clamp(20px,3.2vw,46px); left: clamp(20px,3.2vw,46px);
-      z-index: 6;
-      display: inline-flex; align-items: center; gap: 11px;
-      font-size: clamp(8px,1vw,12px); font-weight: 500;
-      letter-spacing: 2px; text-transform: uppercase;
-      color: var(--ink); font-family: var(--font-display);
-      background: none; border: none; padding: 0; cursor: pointer;
-      opacity: 0; transition: opacity .4s ease;
-      -webkit-font-smoothing: antialiased;
-    }
-    #preloader-stage.ready .p-cue { animation: p-cue-pulse 2.4s ease-in-out infinite; }
-    @keyframes p-cue-pulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
-    .p-chev {
-      width: 7px; height: 7px;
-      border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
-      transform: rotate(45deg); flex-shrink: 0;
-    }
-
     @media (prefers-reduced-motion: reduce) {
       .p-curtain, .p-numstack, .p-chrome, .p-level { transition: none !important; }
-      #preloader-stage.ready .p-cue { animation: none; opacity: 1; }
     }
   </style>
 </head>
@@ -511,7 +497,15 @@
     })();
   </script>
 
-  <script>document.body.classList.add('preloader-active');</script>
+  <script>
+    (function () {
+      var shuttling = false;
+      try { shuttling = !!sessionStorage.getItem('slatShutter:pending'); } catch (e) {}
+      window._shuttling = shuttling;
+      if (shuttling) document.body.classList.add('shutter-return');
+      else document.body.classList.add('preloader-active');
+    })();
+  </script>
 
   <div id="preloader-stage">
     <div class="p-curtain l"></div>
@@ -527,13 +521,13 @@
         <span class="p-meta br"><span id="p-pct">0</span>%</span>
       </div>
     </div>
-    <button class="p-cue" id="p-cue" aria-label="Scroll to begin">Scroll to begin<span class="p-chev"></span></button>
   </div>
 
   <script>
     (function () {
       var stage    = document.getElementById('preloader-stage');
       if (!stage) return;
+      if (window._shuttling) { stage.style.display = 'none'; return; }
       var pLang = (function () { try { return localStorage.getItem('salazar-lang') || 'en'; } catch (e) { return 'en'; } })();
       var statusPhrases = pLang === 'es' ? [
         'Cargando recursos','Analizando grillas','Renderizando tipo','Trazando rutas',
@@ -555,8 +549,6 @@
       var outlines = stage.querySelectorAll('.p-num-outline');
       var levels   = stage.querySelectorAll('.p-level');
       var pctEl    = document.getElementById('p-pct');
-      var cue      = document.getElementById('p-cue');
-      if (cue && pLang === 'es') { cue.setAttribute('aria-label', 'Desliza para entrar'); cue.childNodes[0].textContent = 'Desliza para entrar'; }
       var D = { count: 2400, hold1: 320, grow: 620, hold2: 200, part: 940, reveal: 0 };
       var easeOut  = function (t) { return 1 - Math.pow(1 - t, 3); };
       var raf, timers = [], armed = false;
@@ -591,7 +583,6 @@
         window.addEventListener('touchmove', leave, { passive: true });
         window.addEventListener('scroll',    leave, { passive: true });
         window.addEventListener('keydown',   onKey);
-        if (cue) cue.addEventListener('click', leave);
       }
 
       function finish() {
@@ -889,11 +880,12 @@
         if (!el) return;
         var stack = typeof el.closest === 'function' ? el.closest('.stack') : null;
         if (stack) {
+          var card = el.closest('.stack-card') || el;
           var sy = window.scrollY || window.pageYOffset || 0;
           var stackAbsTop = stack.getBoundingClientRect().top + sy;
           var cardFlowTop = 0;
           var sib = stack.firstElementChild;
-          while (sib && sib !== el) { cardFlowTop += sib.offsetHeight; sib = sib.nextElementSibling; }
+          while (sib && sib !== card) { cardFlowTop += sib.offsetHeight; sib = sib.nextElementSibling; }
           target = stackAbsTop + cardFlowTop;
         } else {
           var y = 0, n = el;
@@ -916,6 +908,46 @@
       el.classList.add('contact-pulse');
       el.addEventListener('animationend', function () { el.classList.remove('contact-pulse'); }, { once: true });
     };
+  </script>
+
+  <script src="src/slat-shutter.js"></script>
+  <script>
+    window.__shutter = new SlatShutter({ slatMs: 400, stagger: 50, holdMs: 100 });
+
+    // After returning from a case study the reel plays fully, then we smooth-
+    // scroll to the target section once the slats have opened.
+    // - salazar:returnTarget  → named section id ('works' | 'contact')
+    var _rt = null;
+    try {
+      var _rts = sessionStorage.getItem('salazar:returnTarget');
+      if (_rts !== null) { _rt = _rts; sessionStorage.removeItem('salazar:returnTarget'); }
+    } catch (e) {}
+
+    window.__shutter.revealOnLoad().then(function (ran) {
+      if (!ran || !_rt) return;
+      if (window.salGoTo) { window.salGoTo(_rt); return; }
+      // salGoTo not available yet — compute offset manually
+      var tEl = document.querySelector('[data-nav="' + _rt + '"]') || document.getElementById(_rt);
+      if (!tEl) return;
+      var stk = typeof tEl.closest === 'function' ? tEl.closest('.stack') : null;
+      var offset;
+      if (stk) {
+        var card = tEl.closest('.stack-card') || tEl;
+        offset = stk.getBoundingClientRect().top + (window.scrollY || window.pageYOffset || 0);
+        var sib = stk.firstElementChild;
+        while (sib && sib !== card) { offset += sib.offsetHeight; sib = sib.nextElementSibling; }
+      } else {
+        offset = tEl.getBoundingClientRect().top + (window.scrollY || window.pageYOffset || 0);
+      }
+      if (window.__lenis) window.__lenis.scrollTo(offset, { duration: 1.05 });
+      else window.scrollTo({ top: offset, behavior: 'smooth' });
+    });
+
+    // bfcache restore (browser back button) doesn't re-run scripts, so _busy
+    // stays true from the previous navigate() call. Reset it on pageshow.
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted && window.__shutter) window.__shutter._busy = false;
+    });
   </script>
 
   <script src="src/i18n.js?v=2"></script>

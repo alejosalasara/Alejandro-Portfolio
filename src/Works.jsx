@@ -3,11 +3,11 @@
    placeholder. Row also lifts to --surface-1 on hover. */
 
 const WORKS = [
-  { title: 'Metalform SAS', metaKey: 'works.0.meta', tagKey: 'works.0.tag' },
-  { title: 'La Fábrica', metaKey: 'works.1.meta', tagKey: 'works.1.tag' },
-  { title: 'IMFIT', metaKey: 'works.2.meta', tagKey: 'works.2.tag' },
-  { title: 'Noble', metaKey: 'works.3.meta', tagKey: 'works.3.tag' },
-  { title: '100+ Clients', metaKey: 'works.4.meta', tagKey: 'works.4.tag' },
+  { title: 'Metalform SAS', metaKey: 'works.0.meta', tagKey: 'works.0.tag', href: 'works/metalform.html', shutterIndex: 1, shutterTotal: 5 },
+  { title: 'La Fábrica', metaKey: 'works.1.meta', tagKey: 'works.1.tag', href: 'works/la-fabrica.html', shutterIndex: 2, shutterTotal: 5 },
+  { title: 'IMFIT', metaKey: 'works.2.meta', tagKey: 'works.2.tag', href: 'works/imfit.html', shutterIndex: 3, shutterTotal: 5 },
+  { title: 'Noble', metaKey: 'works.3.meta', tagKey: 'works.3.tag', href: 'works/noble.html', shutterIndex: 4, shutterTotal: 5 },
+  { title: 'Email Marketing', metaKey: 'works.4.meta', tagKey: 'works.4.tag', tall: true },
 ];
 
 function Works({ onNav }) {
@@ -53,10 +53,18 @@ function Works({ onNav }) {
         </div>
         <div onMouseLeave={() => { setHover(null); seeded.current = false; }}>
           {WORKS.map((w, idx) => (
-            <div className="works-row" key={w.title}
+            <div className={'works-row' + (w.tall ? ' works-row--stat' : '')} key={w.title}
               onMouseEnter={() => setHover(idx)}
-              onClick={() => onNav && onNav('projects')}>
+              onClick={() => {
+                if (w.href && window.__shutter) {
+                  try { sessionStorage.setItem('salazar:returnTarget', 'works'); } catch (e) {}
+                  window.__shutter.navigate(w.href, { name: w.title, index: w.shutterIndex, total: w.shutterTotal });
+                } else {
+                  onNav && onNav('projects');
+                }
+              }}>
               <span className="w-title">{w.title}</span>
+              {w.tall && <span className="w-count">100+ clients</span>}
               <span className="w-meta">{t(w.metaKey)}</span>
               <span className="w-arrow"><Icon name={'arrow-right'} size={28} /></span>
             </div>
@@ -67,7 +75,7 @@ function Works({ onNav }) {
       {/* single persistent cursor-following 1:1 preview — portalled to <body>
           so no transformed/will-change ancestor can become its containing block */}
       {ReactDOM.createPortal(
-        <div ref={previewRef} className={'work-preview' + (active ? ' is-on' : '')} aria-hidden="true">
+        <div ref={previewRef} className={'work-preview' + (active ? ' is-on' : '') + (WORKS[pvIdx].tall ? ' is-tall' : '')} aria-hidden="true">
           <div className={'pv-img pv-' + (pvIdx % 4)}></div>
           <div className="pv-meta">
             <span className="pv-idx">{String(pvIdx + 1).padStart(2, '0')} / {String(WORKS.length).padStart(2, '0')}</span>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Metalform SAS · Case Study · Alejandro Salazar</title>
+  <link rel="stylesheet" href="../design-system/colors_and_type.css" />
+  <link rel="stylesheet" href="../design-system/kit.css" />
+  <link rel="stylesheet" href="../design-system/synthesis.css" />
+  <link rel="stylesheet" href="deck.css?v=2" />
+  <link rel="stylesheet" href="../src/slat-shutter.css" />
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('salazar-theme') === 'light')
+          document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    .bk-label-s { display: none; }
+    .swipe-pulse {
+      position: fixed; inset: 0;
+      z-index: 42; pointer-events: none; display: none;
+      background: linear-gradient(to left, var(--accent-red), transparent 40%);
+      animation: swipe-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes swipe-pulse {
+      0%, 100% { opacity: 0.03; }
+      50%       { opacity: 0.22; }
+    }
+    @media (max-width: 900px) {
+      .card-pad { max-width: 100% !important; padding-left: 16px !important; padding-right: 16px !important; }
+      .body-copy, .lede, .cover-lede { max-width: 100% !important; }
+      .bk-label   { display: none !important; }
+      .bk-label-s { display: inline !important; }
+      .hud-arrows { display: none !important; }
+      .hud-top {
+        background: rgba(13,13,13,0.55) !important;
+        backdrop-filter: blur(18px) saturate(135%) !important;
+        -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+        border-bottom: 1px solid var(--hairline) !important;
+        padding-top: 14px !important;
+        padding-bottom: 14px !important;
+      }
+      :root[data-theme="light"] .hud-top { background: rgba(244,244,241,0.62) !important; }
+      .shot { min-height: 200px !important; }
+      .hud-bot { padding-right: 0 !important; }
+      .swipe-pulse { display: block !important; visibility: hidden; }
+      body.is-first-card .swipe-pulse { visibility: visible !important; }
+    }
+    @media (hover: none) {
+      .flow { transition: background .2s !important; }
+      .flow:hover  { padding-left: 4px !important; }
+      .flow:active { background: var(--surface-1) !important; }
+    }
+    @media (max-width: 560px) {
+      .flow .f-name { min-width: 0 !important; }
+      .card-main { overflow-y: auto !important; scrollbar-gutter: stable !important; }
+    }
+    @media (max-height: 620px) {
+      .card-main { overflow-y: auto !important; scrollbar-gutter: stable !important; }
+    }
+    :root[data-theme="light"] .flow .f-num { color: var(--ink) !important; }
+    #visit-site .nl-arrow { transition: color .2s !important; }
+    #visit-site:hover .nl-arrow { transform: none !important; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="deck" id="deck" data-titles="solid" data-ghost="on">
+
+      <!-- 01 · COVER -->
+      <section class="card" data-label="cover" data-screen-label="01 Cover">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow cover-tag"><span class="idx">●</span> Case Study · Metalworking · Web</span>
+            <h1 class="cover-name" style="font-size:clamp(52px,11.5vw,140px)">METALFORM</h1>
+            <p class="cover-lede">precision metalwork and industrial maintenance from the Manizales shop floor, given a website that quotes as cleanly as it cuts.</p>
+            <div class="cover-scope">
+              <span class="scope-chip is-fill">Website Design</span>
+              <span class="scope-chip">B2B</span>
+              <span class="scope-year">2025 · Manizales, CO</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">01</div>
+      </section>
+
+      <!-- 02 · OVERVIEW -->
+      <section class="card" data-label="overview" data-screen-label="02 Overview">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">02</span> Overview</span>
+            <div class="split">
+              <div>
+                <h2 class="card-title">what is <span class="red">metalform</span></h2>
+                <p class="body-copy" style="max-width:480px">Metalform SAS is a Manizales metalworking shop: precision fabrication, industrial maintenance and mechanical services for plants and operations across Caldas. A capability-led B2B supplier whose pitch is precision, uptime and on-time delivery.</p>
+              </div>
+              <div class="meta-grid">
+                <div class="meta-cell"><span class="k">Sector</span><span class="v">Metalworking · Industrial</span></div>
+                <div class="meta-cell"><span class="k">Market</span><span class="v">Manizales, Caldas · B2B</span></div>
+                <div class="meta-cell"><span class="k">Services</span><span class="v">Fabrication · Maintenance · Machining</span></div>
+                <div class="meta-cell"><span class="k">Channel</span><span class="v">Website · WhatsApp quote</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">02</div>
+      </section>
+
+      <!-- 03 · OBJECTIVE -->
+      <section class="card" data-label="objective" data-screen-label="03 Objective">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">03</span> Objective</span>
+            <h2 class="card-title">the objective</h2>
+            <p class="lede" style="margin-top:clamp(18px,2.6vh,28px)">a site a procurement buyer trusts in ten seconds, capability up front, and "request a quote" impossible to miss. <span class="mut">no brochure-ware; a working sales tool.</span></p>
+            <div class="steps" style="margin-top:clamp(22px,3.4vh,40px)">
+              <div class="step">
+                <span class="s-num">01</span>
+                <div><h3 class="s-h">prove the capability</h3><p class="s-b">put the shop, the machines and finished work in front of the buyer before a single word of marketing.</p></div>
+              </div>
+              <div class="step">
+                <span class="s-num">02</span>
+                <div><h3 class="s-h">make the services legible</h3><p class="s-b">collapse a vague list of "what we do" (fabrication, maintenance, machining) into a structure a buyer can scan and match to their job.</p></div>
+              </div>
+              <div class="step">
+                <span class="s-num">03</span>
+                <div><h3 class="s-h">drive the quote</h3><p class="s-b">one obvious path to a request-for-quote, with the spec fields that make the first reply useful.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">03</div>
+      </section>
+
+      <!-- 04 · STACK -->
+      <section class="card" data-label="stack" data-screen-label="04 Stack">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">04</span> Stack</span>
+            <h2 class="card-title">the stack</h2>
+            <div class="split" style="margin-top:clamp(20px,3vh,34px)">
+              <div class="terminal">
+                <div class="term-bar">
+                  <div class="lights"><i class="on"></i><i></i><i></i></div>
+                  <span class="term-name">metalform · build</span>
+                </div>
+                <div class="term-body">
+                  <div class="ln"><span class="prompt">›</span><span class="ok">tokens · figma → design variables</span></div>
+                  <div class="ln"><span class="prompt">›</span><span class="ok">site · static corporate build</span></div>
+                  <div class="ln"><span class="prompt">›</span><span class="ok">quote · whatsapp + request form</span></div>
+                  <div class="ln"><span class="prompt">›</span><span class="mut"># capability gallery · spec sheets</span></div>
+                  <div class="ln"><span class="prompt">›</span><span class="ok">measure · ga4 + form events<span class="cursor"></span></span></div>
+                </div>
+              </div>
+              <div class="stack-list">
+                <div class="stack-row"><span class="sk">Design</span><span class="sv">Figma · tokens · <b>capability system</b></span></div>
+                <div class="stack-row"><span class="sk">Build</span><span class="sv">Static corporate site · fast load</span></div>
+                <div class="stack-row"><span class="sk">Quote</span><span class="sv">WhatsApp + <b>request-for-quote</b> form</span></div>
+                <div class="stack-row"><span class="sk">Content</span><span class="sv">Shop photography · spec sheets</span></div>
+                <div class="stack-row"><span class="sk">Measure</span><span class="sv">GA4 · form-conversion events</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">04</div>
+      </section>
+
+      <!-- 05 · REDESIGN -->
+      <section class="card" data-label="redesign" data-screen-label="05 Redesign">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">05</span> Redesign</span>
+            <h2 class="card-title">the redesign</h2>
+            <p class="body-copy" style="max-width:600px">hard rectangles, hairline structure, the work itself as the hero: a site that reads like a spec sheet, not a brochure.</p>
+            <div class="split tight" style="margin-top:clamp(16px,2.4vh,26px);align-items:stretch;gap:clamp(16px,1.6vw,22px)">
+              <div class="shot" style="aspect-ratio:16/10" data-label="Home · desktop redesign">
+                <span class="px-tag">After</span>
+                <span class="cap">metalform · home</span>
+              </div>
+              <div style="display:grid;grid-template-rows:1fr 1fr;gap:clamp(16px,1.6vw,22px)">
+                <div class="shot" data-label="Capabilities / gallery"><span class="cap">capabilities</span></div>
+                <div class="shot" data-label="Request a quote"><span class="cap">quote form</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">05</div>
+      </section>
+
+      <!-- 06 · NEXT -->
+      <section class="card" data-label="next" data-screen-label="06 Next">
+        <div class="card-pad">
+          <div class="card-main">
+            <span class="tech-eyebrow c-eyebrow"><span class="idx">06</span> Next</span>
+            <h2 class="card-title">what's next</h2>
+            <div class="next-wrap" style="margin-top:clamp(20px,3vh,36px)">
+              <button class="next-link" id="next-project" type="button">
+                <span><span class="nl-k">Next project</span><span class="nl-t">la fábrica</span></span>
+                <span class="nl-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></span>
+              </button>
+              <a class="next-link" id="visit-site" href="javascript:void(0)" target="_blank" rel="noopener noreferrer">
+                <span><span class="nl-k">live site</span><span class="nl-t">metalform sas</span></span>
+                <span class="nl-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></span>
+              </a>
+              <button class="next-link" id="next-index" type="button">
+                <span><span class="nl-k">Index</span><span class="nl-t"></span></span>
+                <span class="nl-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-ghost" aria-hidden="true">06</div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div class="hud">
+    <div class="hud-bar hud-top">
+      <div class="hud-brand">
+        <button class="bk" id="hud-back" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M5 12l6-6M5 12l6 6"/></svg>
+        </button>
+      </div>
+      <div class="hud-idx">
+        <span class="now" id="hud-now">01</span><span class="sep">/</span><span id="hud-total">06</span>
+        <span class="sect" id="hud-sect">COVER</span>
+      </div>
+    </div>
+    <div class="hud-bar hud-bot">
+      <div class="rail">
+        <div class="rail-track"></div>
+        <div class="rail-fill" id="rail-fill"></div>
+        <div class="rail-ticks">
+          <button class="rail-tick on" type="button" aria-label="Go to card 1"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 2"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 3"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 4"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 5"></button>
+          <button class="rail-tick" type="button" aria-label="Go to card 6"></button>
+        </div>
+      </div>
+      <div class="hud-arrows">
+        <button class="nav-btn" id="nav-prev" type="button" aria-label="Previous" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button class="nav-btn" id="nav-next" type="button" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="reel-flash" id="reel-flash" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i><i></i>
+  </div>
+
+  <div class="scroll-hint" id="scroll-hint" aria-hidden="true">
+    <span>scroll</span><span class="ln"></span><span>→</span>
+  </div>
+
+  <script src="deck.js?v=2"></script>
+  <script src="../src/slat-shutter.js"></script>
+  <script>
+    var shutter = new SlatShutter({ slatMs: 400, stagger: 50, holdMs: 100 });
+    shutter.revealOnLoad();
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) shutter._busy = false;
+    });
+
+    var _lang = 'en';
+    try { _lang = localStorage.getItem('salazar-lang') || 'en'; } catch (e) {}
+    var _backLabel = _lang === 'es' ? 'Trabajos seleccionados' : 'Selected Works';
+
+    function goHome() {
+      try { sessionStorage.setItem('salazar:returnTarget', 'works'); } catch (e) {}
+      shutter.navigate('../index.html', { name: _backLabel });
+    }
+
+    var back = document.getElementById('hud-back');
+    if (back) {
+      var spanFull = document.createElement('span');
+      spanFull.className = 'bk-label';
+      spanFull.textContent = _backLabel;
+      back.appendChild(spanFull);
+      var spanShort = document.createElement('span');
+      spanShort.className = 'bk-label-s';
+      spanShort.textContent = _lang === 'es' ? 'Regresar' : 'Go back';
+      back.appendChild(spanShort);
+      back.addEventListener('click', goHome);
+    }
+
+    var np = document.getElementById('next-project');
+    if (np) np.addEventListener('click', function () {
+      shutter.navigate('./la-fabrica.html', { name: 'La Fábrica' });
+    });
+
+    var ni = document.getElementById('next-index');
+    if (ni) {
+      var nlT = ni.querySelector('.nl-t');
+      if (nlT) nlT.textContent = _backLabel.toLowerCase();
+      ni.addEventListener('click', goHome);
+    }
+
+    if (_lang === 'es') {
+      function _t(sel, text) { var e = document.querySelector(sel); if (e) e.textContent = text; }
+      function _h(sel, html) { var e = document.querySelector(sel); if (e) e.innerHTML = html; }
+      function _tAll(sel, arr) { var es = document.querySelectorAll(sel); arr.forEach(function(v,i){ if(es[i]) es[i].textContent = v; }); }
+      function _hAll(sel, arr) { var es = document.querySelectorAll(sel); arr.forEach(function(v,i){ if(es[i]) es[i].innerHTML = v; }); }
+
+      // 01 Cover
+      _h('.cover-tag', '<span class="idx">●</span> Caso de Estudio · Metalurgia · Web');
+      _t('.cover-lede', 'metalmecánica de precisión y mantenimiento industrial desde el taller de Manizales, con un sitio web que cotiza tan limpiamente como corta.');
+      var chips = document.querySelectorAll('.scope-chip');
+      if (chips[0]) chips[0].textContent = 'Diseño Web';
+
+      // 02 Overview
+      _h('.card:nth-child(2) .c-eyebrow', '<span class="idx">02</span> Resumen');
+      _h('.card:nth-child(2) .card-title', 'qué es <span class="red">metalform</span>');
+      _t('.card:nth-child(2) .body-copy', 'Metalform SAS es un taller de metalmecánica en Manizales: fabricación de precisión, mantenimiento industrial y servicios mecánicos para plantas y operaciones en Caldas. Un proveedor B2B orientado a capacidades cuya propuesta de valor es precisión, disponibilidad y entrega a tiempo.');
+      _tAll('.meta-cell .k', ['Sector', 'Mercado', 'Servicios', 'Canal']);
+      var mvs = document.querySelectorAll('.meta-cell .v');
+      if (mvs[2]) mvs[2].textContent = 'Fabricación · Mantenimiento · Mecanizado';
+      if (mvs[3]) mvs[3].textContent = 'Sitio Web · Cotización WhatsApp';
+
+      // 03 Objective
+      _h('.card:nth-child(3) .c-eyebrow', '<span class="idx">03</span> Objetivo');
+      _t('.card:nth-child(3) .card-title', 'el objetivo');
+      _h('.card:nth-child(3) .lede', 'un sitio en el que un comprador de adquisiciones confía en diez segundos, capacidad al frente y "solicitar cotización" imposible de pasar por alto. <span class="mut">no una página de folleto; una herramienta de ventas real.</span>');
+      _tAll('.s-h', ['demostrar la capacidad', 'hacer legibles los servicios', 'impulsar la cotización']);
+      _tAll('.s-b', [
+        'poner el taller, las máquinas y el trabajo terminado frente al comprador antes de una sola palabra de marketing.',
+        'colapsar una lista vaga de "lo que hacemos" (fabricación, mantenimiento, mecanizado) en una estructura que el comprador puede escanear y emparejar con su trabajo.',
+        'un camino obvio a una solicitud de cotización, con los campos de especificaciones que hacen útil la primera respuesta.'
+      ]);
+
+      // 04 Stack
+      _h('.card:nth-child(4) .c-eyebrow', '<span class="idx">04</span> Stack');
+      _t('.card:nth-child(4) .card-title', 'el stack');
+      _tAll('.ln .ok', [
+        'tokens · figma → variables de diseño',
+        'sitio · construcción corporativa estática',
+        'cotización · whatsapp + formulario de solicitud',
+        'medición · ga4 + eventos de formulario'
+      ]);
+      _t('.ln .mut', '# galería de capacidad · fichas técnicas');
+      _tAll('.stack-row .sk', ['Diseño', 'Desarrollo', 'Cotización', 'Contenido', 'Medición']);
+      _hAll('.stack-row .sv', [
+        'Figma · tokens · <b>sistema de capacidad</b>',
+        'Sitio corporativo estático · carga rápida',
+        'WhatsApp + <b>solicitud de cotización</b>',
+        'Fotografía de taller · fichas técnicas',
+        'GA4 · eventos de conversión de formularios'
+      ]);
+
+      // 05 Redesign
+      _h('.card:nth-child(5) .c-eyebrow', '<span class="idx">05</span> Rediseño');
+      _t('.card:nth-child(5) .card-title', 'el rediseño');
+      _t('.card:nth-child(5) .body-copy', 'rectángulos firmes, estructura de línea fina, el trabajo mismo como protagonista: un sitio que se lee como una ficha técnica, no como un folleto.');
+      var shots5 = document.querySelectorAll('.card:nth-child(5) .shot');
+      if (shots5[0]) { shots5[0].setAttribute('data-label','Inicio · rediseño escritorio'); shots5[0].querySelector('.px-tag') && (shots5[0].querySelector('.px-tag').textContent = 'Después'); shots5[0].querySelector('.cap') && (shots5[0].querySelector('.cap').textContent = 'metalform · inicio'); }
+      if (shots5[1]) { shots5[1].setAttribute('data-label','Capacidades / galería'); shots5[1].querySelector('.cap') && (shots5[1].querySelector('.cap').textContent = 'capacidades'); }
+      if (shots5[2]) { shots5[2].setAttribute('data-label','Solicitar cotización'); shots5[2].querySelector('.cap') && (shots5[2].querySelector('.cap').textContent = 'formulario de cotización'); }
+
+      // 06 Next
+      _h('.card:nth-child(6) .c-eyebrow', '<span class="idx">06</span> Siguiente');
+      _t('.card:nth-child(6) .card-title', 'qué sigue');
+      _t('.card:nth-child(6) #next-project .nl-k', 'Siguiente proyecto');
+      _t('#visit-site .nl-k', 'sitio web');
+
+      // Scroll hint
+      var sh = document.querySelector('.scroll-hint span');
+      if (sh) sh.textContent = 'desliza';
+
+      var labelMap = ['Portada','Resumen','Objetivo','Stack','Rediseño','Siguiente'];
+      document.querySelectorAll('.card').forEach(function(c, i) {
+        if (labelMap[i]) c.setAttribute('data-screen-label', (i+1 < 10 ? '0'+(i+1) : i+1) + ' ' + labelMap[i]);
+      });
+      var hudSect = document.getElementById('hud-sect');
+      if (hudSect) hudSect.textContent = labelMap[0].toUpperCase();
+    }
+  </script>
+</body>
+</html>
