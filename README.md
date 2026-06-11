@@ -1,7 +1,7 @@
 # Alejandro Salazar — Portfolio
 
 Personal portfolio for **Alejandro Salazar**, Growth UX/UI Designer & Email Marketer.
-Single-page, long-scroll, bilingual (EN/ES), light/dark theme.
+Single-page, long-scroll, bilingual (EN/ES), light/dark theme, with horizontal card-deck case study pages.
 
 **Stack:** React 18 (UMD/CDN) · Babel standalone (in-browser JSX) · Lenis smooth scroll · no bundler — open `index.html` with any local server.
 
@@ -26,7 +26,7 @@ Then open `http://localhost:<port>`.
 - Full-screen intro that counts 0 → 100 with an outline number, then splits with vertical curtains
 - Phases: `counting → grow → part → ready → leaving` driven by CSS classes + JS timers
 - Scroll is locked (`overflow: hidden` + Lenis paused) until the curtains finish opening
-- Language-aware: status phrase and "Scroll to begin" / "Desliza para entrar" read from `localStorage`
+- Language-aware: status phrase reads from `localStorage`
 - Pointer events disabled on the stage in `ready` state so the page is clickable underneath
 
 ### Hero
@@ -77,9 +77,56 @@ Each card is `position: sticky; top: 0; min-height: 100vh`. Later cards rise ove
 
 ---
 
+## Case study pages
+
+Four horizontal card-deck case studies, each a standalone HTML file under `works/`:
+
+| File | Project | Cards |
+|---|---|---|
+| `works/imfit.html` | IMFIT — D2C supplements | 9 |
+| `works/noble.html` | Noble — streetwear drops | 8 |
+| `works/la-fabrica.html` | La Fábrica — vape store | 8 |
+| `works/metalform.html` | Metalform SAS — B2B industrial | 6 |
+
+**Deck system (`works/deck.js` + `works/deck.css`):**
+- Horizontal navigation via wheel/trackpad, touch swipe, keyboard (← →), and on-screen rail ticks
+- Three motion modes: `track` (eased snap), `glide` (free drag), `reel` (slat flash cut)
+- HUD: frosted-glass top bar matching the index navbar, bottom progress rail flush to screen edge
+- Mobile swipe pulse: full-viewport right-edge glow, visible only on the first card and only until the user scrolls away (latched with `_swipePulseDone`)
+- Scroll hint (`scroll →`) fades in on the cover card, disappears on first move
+- Last card has two CTAs: **Next project** (navigates to the next case study) and **Live site** (external-link icon, opens brand URL)
+
+**Each case study covers:**
+1. Cover — project name, tags, scope chips
+2. Overview — brand context, meta grid
+3. Objective — 3 numbered steps
+4. Stack — terminal UI + stack list
+5. Redesign or Audit — screenshots / findings table
+6. Email — 5 lifecycle flows
+7. Results — metric tiles (where applicable)
+8. Next — navigation CTAs
+
+**Bilingual:** all four pages are fully translated to Spanish via inline `<script>` i18n blocks using `_t()`, `_h()`, `_tAll()`, `_hAll()`.
+
+**Safari iOS caching:** critical responsive CSS is embedded as inline `<style>` blocks inside each page's `<head>` so it is always served fresh with the HTML response. External files use `?v=2` cache-bust query strings.
+
+---
+
+## Page transitions
+
+`src/slat-shutter.js` + `src/slat-shutter.css` — a red-slat curtain system used when navigating between the index and case study pages.
+
+```js
+var shutter = new SlatShutter({ slatMs: 400, stagger: 50, holdMs: 100 });
+shutter.revealOnLoad();        // plays the open animation on page load
+shutter.navigate(url, opts);   // plays close → navigates
+```
+
+---
+
 ## Internationalization
 
-`src/i18n.js` holds the full EN/ES string table. All components consume it via `window.useT()` (a thin React context hook). Switching language updates `localStorage['salazar-lang']` and re-renders the entire tree. The preloader also reads this key directly (plain JS, before React mounts).
+`src/i18n.js` holds the full EN/ES string table. All components consume it via `window.useT()` (a thin React context hook). Switching language updates `localStorage['salazar-lang']` and re-renders the entire tree. The preloader also reads this key directly (plain JS, before React mounts). Case study pages translate inline via `_t()` / `_h()` calls scoped to each card.
 
 ---
 
@@ -125,12 +172,21 @@ src/
   Footer.jsx             — social + clock + GO UP
   Icons.jsx              — icon glyph set
   LineArt.jsx            — SVG wireframe motifs (globe, mesh, coil)
+  slat-shutter.js        — page transition system
+  slat-shutter.css       — slat curtain styles
   tweaks-panel.jsx       — dev-only tweaks panel (not a product feature)
 design-system/
   colors_and_type.css    — design tokens + @font-face
   kit.css                — shared component styles
   synthesis.css          — layout + section styles
   fonts/                 — Stara .ttf files (500–900)
+works/
+  deck.js                — horizontal card deck controller
+  deck.css               — deck layout, HUD, motion, mobile styles
+  imfit.html             — IMFIT case study (9 cards)
+  noble.html             — Noble case study (8 cards)
+  la-fabrica.html        — La Fábrica case study (8 cards)
+  metalform.html         — Metalform SAS case study (6 cards)
 ```
 
 ---
@@ -139,6 +195,6 @@ design-system/
 
 - In-browser Babel is used for portability — not a production setup.
 - `tweaks-panel.jsx` is an authoring aid only; ignore/remove before shipping.
-- Primary breakpoints: `1000px` (globe), `768px` (structural), `520px` (form), `460px` (small-phone).
+- Primary breakpoints: `1000px` (globe), `900px` (deck mobile), `768px` (structural), `520px` (form), `460px` (small-phone).
 - `prefers-reduced-motion` is respected by the preloader, marquee, parallax, entrance animations, and Lenis.
-- `scrollbar-gutter: stable` prevents layout shift when the preloader releases the scroll lock.
+- `scrollbar-gutter: stable` prevents layout shift on both the index and case study pages.
